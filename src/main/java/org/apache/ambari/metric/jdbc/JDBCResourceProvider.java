@@ -4,12 +4,16 @@ import org.apache.ambari.metric.internal.AbstractResourceProvider;
 import org.apache.ambari.metric.internal.PropertyIdImpl;
 import org.apache.ambari.metric.internal.ResourceImpl;
 import org.apache.ambari.metric.internal.SchemaImpl;
+import org.apache.ambari.metric.jmx.JMXPropertyProvider;
 import org.apache.ambari.metric.spi.Predicate;
 import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.PropertyProvider;
 import org.apache.ambari.metric.spi.Request;
 import org.apache.ambari.metric.spi.Resource;
+import org.apache.ambari.metric.spi.ResourceProvider;
 import org.apache.ambari.metric.spi.Schema;
+import org.apache.ambari.metric.utilities.DBHelper;
+import org.apache.ambari.metric.utilities.Properties;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,13 +21,12 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * JDBC based resource provider.
  */
-public abstract class JDBCResourceProvider extends AbstractResourceProvider {
+public class JDBCResourceProvider extends AbstractResourceProvider {
 
     private final Resource.Type type;
 
@@ -31,10 +34,17 @@ public abstract class JDBCResourceProvider extends AbstractResourceProvider {
 
     private final Schema schema;
 
-    protected JDBCResourceProvider(Resource.Type type, Set<PropertyId> propertyIds, Map<String, PropertyId> keyPropertyIds) {
+    private final ConnectionFactory connectionFactory;
+
+    //TODO : inject property providers
+
+    private JDBCResourceProvider(ConnectionFactory connectionFactory, Resource.Type type) {
+        this.connectionFactory = connectionFactory;
         this.type = type;
-        this.propertyIds = propertyIds;
-        schema = new SchemaImpl(this, keyPropertyIds);
+        this.propertyIds = Properties.getPropertyIds(type, "DB");
+        schema = new SchemaImpl(this, Properties.getKeyPropertyIds(type));
+
+        addPropertyProvider(JMXPropertyProvider.create(type, DBHelper.getHosts()));
     }
 
     @Override
@@ -52,19 +62,17 @@ public abstract class JDBCResourceProvider extends AbstractResourceProvider {
         }
 
         try {
-            ResultSet rs;
-
-            Connection connection = getConnection();
+            Connection connection = connectionFactory.getConnection();
 
             try {
                 String sql = getSQL(propertyIds, predicate);
 
-                System.out.println(sql);
+//                System.out.println(sql);
 
                 Statement statement = connection.createStatement();
                 statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-                rs =  statement.executeQuery(sql);
+                ResultSet rs =  statement.executeQuery(sql);
 
                 while (rs.next()) {
                     ResultSetMetaData metaData    = rs.getMetaData();
@@ -88,29 +96,17 @@ public abstract class JDBCResourceProvider extends AbstractResourceProvider {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        propertyIds = request.getPropertyIds();
-        if ( propertyIds == null || propertyIds.isEmpty() ) {
-            propertyIds = schema.getPropertyIds();
-        } else {
-            if (predicate != null) {
-                propertyIds.addAll(predicate.getPropertyIds());
-            }
-            propertyIds.retainAll(schema.getPropertyIds());
+            throw new IllegalStateException("DB error : ", e);
         }
 
         for (Resource resource : resources) {
             for (PropertyProvider propertyProvider : getPropertyProviders()) {
-                propertyProvider.populateResource(resource, new HashSet<PropertyId>(propertyIds));
+                propertyProvider.populateResource(resource, request, predicate);
             }
         }
 
         return resources;
     }
-
-    protected abstract Connection getConnection() throws SQLException;
 
     private String getSQL(Set<PropertyId> propertyIds, Predicate predicate) {
 
@@ -133,7 +129,6 @@ public abstract class JDBCResourceProvider extends AbstractResourceProvider {
             tables.append(table);
         }
 
-
         String sql = "select " + columns + " from " + tables;
 
         if (predicate != null && propertyIds.containsAll(predicate.getPropertyIds())) {
@@ -152,11 +147,6 @@ public abstract class JDBCResourceProvider extends AbstractResourceProvider {
     }
 
     @Override
-    public void populateResource(Resource resource, Set<PropertyId> ids) {
-
-    }
-
-    @Override
     public Set<PropertyId> getPropertyIds() {
         return propertyIds;
     }
@@ -165,4 +155,17 @@ public abstract class JDBCResourceProvider extends AbstractResourceProvider {
     public Schema getSchema() {
         return schema;
     }
+
+    /**
+     * Factory method.
+     *
+     * @param connectionFactory the factory used to obtain a {@link Connection connection}
+     * @param type              the {@link Resource.Type resource type}
+     *
+     * @return a new {@link ResourceProvider} instance
+     */
+    public static ResourceProvider create(ConnectionFactory connectionFactory, Resource.Type type) {
+        return new JDBCResourceProvider(connectionFactory, type);
+    }
+
 }

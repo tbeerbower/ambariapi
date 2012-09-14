@@ -8,10 +8,10 @@ import java.util.Set;
  * resources of a given type.  The resource provider plugs into and is used
  * by the cluster controller to obtain a list of resources for a given request.
  */
-public interface ResourceProvider extends PropertyProvider{
+public interface ResourceProvider {
     public Set<Resource> getResources(Request request, Predicate predicate);
 
-    public void addPropertyProvider(PropertyProvider provider);
+    public Set<PropertyId> getPropertyIds();
 
     public Schema getSchema();
 }

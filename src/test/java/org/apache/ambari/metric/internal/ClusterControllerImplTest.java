@@ -1,21 +1,13 @@
 package org.apache.ambari.metric.internal;
 
-import org.apache.ambari.metric.ganglia.GangliaPropertyProvider;
-import org.apache.ambari.metric.jdbc.SQLiteResourceProvider;
-import org.apache.ambari.metric.jmx.JMXPropertyProvider;
 import org.apache.ambari.metric.predicate.AndPredicate;
 import org.apache.ambari.metric.predicate.EqualsPredicate;
 import org.apache.ambari.metric.predicate.OrPredicate;
 import org.apache.ambari.metric.spi.ClusterController;
 import org.apache.ambari.metric.spi.Predicate;
 import org.apache.ambari.metric.spi.PropertyId;
-import org.apache.ambari.metric.internal.PropertyIdImpl;
-import org.apache.ambari.metric.spi.PropertyProvider;
 import org.apache.ambari.metric.spi.Request;
 import org.apache.ambari.metric.spi.Resource;
-import org.apache.ambari.metric.spi.ResourceProvider;
-import org.apache.ambari.metric.internal.ClusterControllerImpl;
-import org.apache.ambari.metric.internal.RequestImpl;
 import org.junit.Test;
 
 import java.util.HashSet;

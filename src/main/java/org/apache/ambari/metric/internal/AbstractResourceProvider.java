@@ -17,7 +17,6 @@ import java.util.Set;
 public abstract class AbstractResourceProvider implements ResourceProvider{
     private final List<PropertyProvider> propertyProviders = new LinkedList<PropertyProvider>();
 
-    @Override
     public void addPropertyProvider(PropertyProvider provider) {
         propertyProviders.add(provider);
     }

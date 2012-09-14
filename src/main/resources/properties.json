@@ -7,10 +7,8 @@
             {"name" : "state",         "category" : "Clusters", "temporal" : false }
         ],
         "JMX":[
-            {"name" : "foo",        "category" : "JMX", "temporal" : false }
         ],
         "GANGLIA":[
-            {"name" : "bar",        "category" : "GANGLIA", "temporal" : false }
         ]
     },
     "Service":
@@ -21,43 +19,37 @@
             {"name" : "state",           "category" : "ServiceInfo", "temporal" : false }
         ],
         "JMX":[
-            {"name" : "foo",        "category" : "JMX", "temporal" : false }
         ],
         "GANGLIA":[
-            {"name" : "bar",        "category" : "GANGLIA", "temporal" : false }
         ]
     },
     "Host":
     {
         "DB":[
-            {"name" : "cluster_name",          "category" : "Hosts", "temporal" : false },
-            {"name" : "host_name",          "category" : "Hosts", "temporal" : false },
-            {"name" : "ip",          "category" : "Hosts", "temporal" : false },
-            {"name" : "total_mem",          "category" : "Hosts", "temporal" : false },
-            {"name" : "cpu_count",          "category" : "Hosts", "temporal" : false },
-            {"name" : "os_arch",          "category" : "Hosts", "temporal" : false },
-            {"name" : "os_type",          "category" : "Hosts", "temporal" : false }
+            {"name" : "cluster_name", "category" : "Hosts", "temporal" : false },
+            {"name" : "host_name",    "category" : "Hosts", "temporal" : false },
+            {"name" : "ip",           "category" : "Hosts", "temporal" : false },
+            {"name" : "total_mem",    "category" : "Hosts", "temporal" : false },
+            {"name" : "cpu_count",    "category" : "Hosts", "temporal" : false },
+            {"name" : "os_arch",      "category" : "Hosts", "temporal" : false },
+            {"name" : "os_type",      "category" : "Hosts", "temporal" : false }
         ],
         "JMX":[
-            {"name" : "foo",        "category" : "JMX", "temporal" : false }
         ],
         "GANGLIA":[
-            {"name" : "bar",        "category" : "GANGLIA", "temporal" : false }
         ]
     },
     "Component":
     {
         "DB":[
-            {"name" : "cluster_name",          "category" : "ServiceComponentInfo", "temporal" : false },
-            {"name" : "service_name",          "category" : "ServiceComponentInfo", "temporal" : false },
-            {"name" : "component_name",          "category" : "ServiceComponentInfo", "temporal" : false },
+            {"name" : "cluster_name",   "category" : "ServiceComponentInfo", "temporal" : false },
+            {"name" : "service_name",   "category" : "ServiceComponentInfo", "temporal" : false },
+            {"name" : "component_name", "category" : "ServiceComponentInfo", "temporal" : false },
             {"name" : "state",          "category" : "ServiceComponentInfo", "temporal" : false }
         ],
         "JMX":[
-            {"name" : "foo",        "category" : "JMX", "temporal" : false }
         ],
         "GANGLIA":[
-            {"name" : "bar",        "category" : "GANGLIA", "temporal" : false }
         ]
     },
     "HostComponent":
@@ -70,10 +62,24 @@
             {"name" : "state",          "category" : "HostRoles", "temporal" : false }
         ],
         "JMX":[
-            {"name" : "foo",        "category" : "JMX", "temporal" : false }
+            {"name" : "memNonHeapUsedM",        "category" : "jvm", "temporal" : false },
+            {"name" : "memNonHeapCommittedM",   "category" : "jvm", "temporal" : false },
+            {"name" : "memHeapUsedM",           "category" : "jvm", "temporal" : false },
+            {"name" : "memHeapCommittedM",      "category" : "jvm", "temporal" : false },
+            {"name" : "gcCount",                "category" : "jvm", "temporal" : false },
+            {"name" : "gcTimeMillis",           "category" : "jvm", "temporal" : false },
+            {"name" : "threadsNew",             "category" : "jvm", "temporal" : false },
+            {"name" : "threadsRunnable",        "category" : "jvm", "temporal" : false },
+            {"name" : "threadsBlocked",         "category" : "jvm", "temporal" : false },
+            {"name" : "threadsWaiting",         "category" : "jvm", "temporal" : false },
+            {"name" : "threadsTimedWaiting",    "category" : "jvm", "temporal" : false },
+            {"name" : "threadsTerminated",      "category" : "jvm", "temporal" : false },
+            {"name" : "logFatal",               "category" : "jvm", "temporal" : false },
+            {"name" : "logError",               "category" : "jvm", "temporal" : false },
+            {"name" : "logWarn",                "category" : "jvm", "temporal" : false },
+            {"name" : "memHeapUsedM",           "category" : "jvm", "temporal" : false }
         ],
         "GANGLIA":[
-            {"name" : "bar",        "category" : "GANGLIA", "temporal" : false }
         ]
     }
 }

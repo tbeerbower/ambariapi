@@ -2,8 +2,10 @@
 package org.apache.ambari.metric.ganglia;
 
 import org.apache.ambari.metric.internal.PropertyIdImpl;
+import org.apache.ambari.metric.spi.Predicate;
 import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.PropertyProvider;
+import org.apache.ambari.metric.spi.Request;
 import org.apache.ambari.metric.spi.Resource;
 
 import java.util.HashMap;
@@ -59,20 +61,24 @@ public class GangliaPropertyProvider implements PropertyProvider {
     /**
      * Map of Ganglia cluster names keyed by component type.
      */
-    private static final Map<String, String> componentMap = new HashMap<String, String>();
+    private static final Map<String, String> COMPONENT_MAP = new HashMap<String, String>();
 
     static {
-        componentMap.put("NAMENODE",   "HDPNameNode");
-        componentMap.put("JOBTRACKER", "HDPJobTracker");
-//        componentMap.put("???", "HDPSlaves");
+        COMPONENT_MAP.put("NAMENODE", "HDPNameNode");
+        COMPONENT_MAP.put("JOBTRACKER", "HDPJobTracker");
+//        COMPONENT_MAP.put("???", "HDPSlaves");
     }
 
     @Override
-    public void populateResource(Resource resource, Set<PropertyId> ids) {
+    public void populateResource(Resource resource, Request request, Predicate predicate) {
 
+        Set<PropertyId> ids = request.getPropertyIds();
         if ( ids == null || ids.isEmpty() ) {
             ids = getPropertyIds();
         } else {
+            if (predicate != null) {
+                ids.addAll(predicate.getPropertyIds());
+            }
             ids.retainAll(getPropertyIds());
         }
 
@@ -83,7 +89,7 @@ public class GangliaPropertyProvider implements PropertyProvider {
         host = hackHostName(host);
         // -----
 
-        String cluster = componentMap.get(component);
+        String cluster = COMPONENT_MAP.get(component);
 
         if (cluster == null) {
             return;

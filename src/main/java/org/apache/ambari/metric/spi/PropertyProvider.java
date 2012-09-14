@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public interface PropertyProvider {
 
-    public void populateResource(Resource resource, Set<PropertyId> ids);
+    public void populateResource(Resource resource, Request request, Predicate predicate);
 
     public Set<PropertyId> getPropertyIds();
 }

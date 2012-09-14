@@ -19,8 +19,8 @@ public class Properties {
     private static final String PROPERTIES_FILE = "properties.json";
     private static final String KEY_PROPERTIES_FILE = "key_properties.json";
 
-    static final Map<String, Map<String, Set<PropertyId>>> PROPERTY_IDS = readPropertyIds(PROPERTIES_FILE);
-    static final Map<String, Map<String, PropertyId>> KEY_PROPERTY_IDS = readKeyPropertyIds(KEY_PROPERTIES_FILE);
+    private static final Map<String, Map<String, Set<PropertyId>>> PROPERTY_IDS = readPropertyIds(PROPERTIES_FILE);
+    private static final Map<String, Map<String, PropertyId>> KEY_PROPERTY_IDS = readKeyPropertyIds(KEY_PROPERTIES_FILE);
 
     public PropertyId getPropertyId(String name, String category) {
         return new PropertyIdImpl(name, category, false);
@@ -52,6 +52,7 @@ public class Properties {
             throw new IllegalStateException("Can't read properties file " + filename, e);
         }
     }
+
     private static Map<String, Map<String, PropertyId>> readKeyPropertyIds(String filename) {
         ObjectMapper mapper = new ObjectMapper();
 
