@@ -31,21 +31,26 @@ public class JMXPropertyProvider implements PropertyProvider {
      * Map of jmx sources keyed by internal host name and component type.
      * TODO : how do we get the info for this mapping?
      */
-    private static final Map<String, String> JMX_SOURCES = new HashMap<String, String>();
+    private static final Map<String, String> HOSTS = new HashMap<String, String>();
 
     static {
-        JMX_SOURCES.put("domu-12-31-39-15-25-c7.compute-1.internal:NAMENODE", "ec2-107-22-86-120.compute-1.amazonaws.com:50070");
-        JMX_SOURCES.put("domu-12-31-39-15-25-c7.compute-1.internal:HBASE_MASTER", "ec2-107-22-86-120.compute-1.amazonaws.com:60010");
-        JMX_SOURCES.put("domu-12-31-39-16-c1-48.compute-1.internal:DATANODE", "ec2-184-73-38-68.compute-1.amazonaws.com:50075");
-        JMX_SOURCES.put("domu-12-31-39-16-c1-48.compute-1.internal:JOBTRACKER", "ec2-184-73-38-68.compute-1.amazonaws.com:50030");
-        JMX_SOURCES.put("domu-12-31-39-16-c1-48.compute-1.internal:TASKTRACKER", "ec2-184-73-38-68.compute-1.amazonaws.com:50060");
-        JMX_SOURCES.put("ip-10-110-19-142.ec2.internal:DATANODE", "ec2-23-22-27-143.compute-1.amazonaws.com:50075");
-        JMX_SOURCES.put("ip-10-110-19-142.ec2.internal:TASKTRACKER", "ec2-23-22-27-143.compute-1.amazonaws.com:50060");
-        JMX_SOURCES.put("ip-10-111-35-113.ec2.internal:DATANODE", "ec2-107-22-21-111.compute-1.amazonaws.com:50075");
-        JMX_SOURCES.put("ip-10-111-35-113.ec2.internal:TASKTRACKER", "ec2-107-22-21-111.compute-1.amazonaws.com:50060");
-        JMX_SOURCES.put("ip-10-68-18-171.ec2.internal:DATANODE", "ec2-23-23-56-2.compute-1.amazonaws.com:50075");
-        JMX_SOURCES.put("ip-10-68-18-171.ec2.internal:TASKTRACKER", "ec2-23-23-56-2.compute-1.amazonaws.com:50060");
+        HOSTS.put("domu-12-31-39-15-25-c7.compute-1.internal", "ec2-107-22-86-120.compute-1.amazonaws.com");
+        HOSTS.put("domu-12-31-39-16-c1-48.compute-1.internal", "ec2-184-73-38-68.compute-1.amazonaws.com");
+        HOSTS.put("ip-10-110-19-142.ec2.internal", "ec2-23-22-27-143.compute-1.amazonaws.com");
+        HOSTS.put("ip-10-111-35-113.ec2.internal", "ec2-107-22-21-111.compute-1.amazonaws.com");
+        HOSTS.put("ip-10-68-18-171.ec2.internal", "ec2-23-23-56-2.compute-1.amazonaws.com");
     }
+
+    private static final Map<String, String> JMX_PORTS = new HashMap<String, String>();
+
+    static {
+        JMX_PORTS.put("NAMENODE", "50070");
+        JMX_PORTS.put("HBASE_MASTER", "60010");
+        JMX_PORTS.put("JOBTRACKER", "50030");
+        JMX_PORTS.put("DATANODE", "50075");
+        JMX_PORTS.put("TASKTRACKER", "50060");
+    }
+
 
     @Override
     public void populateResource(Resource resource, Set<PropertyId> ids) {
@@ -55,10 +60,10 @@ public class JMXPropertyProvider implements PropertyProvider {
             ids.retainAll(getPropertyIds());
         }
 
-        String hostComponentName = resource.getPropertyValue(new PropertyIdImpl("host_name", "HostRoles", false)) + ":" +
-                                   resource.getPropertyValue(new PropertyIdImpl("component_name", "HostRoles", false));
+        String hostName = HOSTS.get(resource.getPropertyValue(new PropertyIdImpl("host_name", "HostRoles", false)));
+        String port     = JMX_PORTS.get(resource.getPropertyValue(new PropertyIdImpl("component_name", "HostRoles", false)));
 
-        String jmxSource = JMX_SOURCES.get(hostComponentName);
+        String jmxSource = hostName + ":" + port;
 
         if (jmxSource == null) {
             return;
