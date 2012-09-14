@@ -5,16 +5,18 @@
     },
     "Service":
     {
-        "Cluster": {"name" : "service_name",   "category" : "Services", "temporal" : false }
+        "Cluster": {"name" : "cluster_name",   "category" : "ServiceInfo", "temporal" : false },
+        "Service": {"name" : "service_name",   "category" : "ServiceInfo", "temporal" : false }
     },
     "Host":
     {
         "Cluster": {"name" : "cluster_name",   "category" : "Hosts", "temporal" : false },
-        "Cluster": {"name" : "host_name",   "category" : "Hosts", "temporal" : false }
+        "Host":    {"name" : "host_name",      "category" : "Hosts", "temporal" : false }
     },
     "Component":
     {
-        "Cluster": {"name" : "cluster_name",   "category" : "HostRoles", "temporal" : false }
+        "Service":   {"name" : "service_name",   "category" : "ServiceComponents", "temporal" : false },
+        "Component": {"name" : "component_name", "category" : "ServiceComponents", "temporal" : false }
     },
     "HostComponent":
     {

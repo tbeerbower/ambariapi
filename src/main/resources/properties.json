@@ -16,9 +16,9 @@
     "Service":
     {
         "DB":[
-            {"name" : "service_name",    "category" : "Services", "temporal" : false },
-            {"name" : "description",     "category" : "Services", "temporal" : false },
-            {"name" : "display_name",    "category" : "Services", "temporal" : false }
+            {"name" : "service_name",    "category" : "ServiceInfo", "temporal" : false },
+            {"name" : "cluster_name",    "category" : "ServiceInfo", "temporal" : false },
+            {"name" : "state",           "category" : "ServiceInfo", "temporal" : false }
         ],
         "JMX":[
             {"name" : "foo",        "category" : "JMX", "temporal" : false }
