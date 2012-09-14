@@ -15,13 +15,14 @@
     },
     "Component":
     {
-        "Service":   {"name" : "service_name",   "category" : "ServiceComponents", "temporal" : false },
-        "Component": {"name" : "component_name", "category" : "ServiceComponents", "temporal" : false }
+        "Cluster":   {"name" : "cluster_name",   "category" : "ServiceComponentInfo", "temporal" : false },
+        "Service":   {"name" : "service_name",   "category" : "ServiceComponentInfo", "temporal" : false },
+        "Component": {"name" : "component_name", "category" : "ServiceComponentInfo", "temporal" : false }
     },
     "HostComponent":
     {
-        "Cluster":   {"name" : "cluster_name",   "category" : "HostRoles", "temporal" : false },
-        "Host":      {"name" : "host_name",      "category" : "HostRoles", "temporal" : false },
-        "Component": {"name" : "component_name", "category" : "HostRoles", "temporal" : false }
+        "Cluster":       {"name" : "cluster_name",   "category" : "HostRoles", "temporal" : false },
+        "Host":          {"name" : "host_name",      "category" : "HostRoles", "temporal" : false },
+        "HostComponent": {"name" : "component_name", "category" : "HostRoles", "temporal" : false }
     }
 }
