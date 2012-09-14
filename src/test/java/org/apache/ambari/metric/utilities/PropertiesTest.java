@@ -39,9 +39,9 @@ public class PropertiesTest {
     @Test
     public void testGetKeyPropertyIds() throws Exception {
 
-        Map<String, PropertyId> keyProperties =  Properties.getKeyPropertyIds(Resource.Type.HostComponent);
+        Map<String, PropertyId> keyProperties =  Properties.getKeyPropertyIds(Resource.Type.Service);
 
-//        System.out.println(keyProperties);
+        System.out.println(keyProperties);
     }
 
 

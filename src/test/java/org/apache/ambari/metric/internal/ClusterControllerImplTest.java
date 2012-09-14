@@ -62,6 +62,11 @@ public class ClusterControllerImplTest {
         // request the services; predicate is null so we'll get them all
         getResources(Resource.Type.Service, cc, request, null);
 
+
+        PropertyId serviceIdProperty = cc.getSchema(
+                Resource.Type.Service).getKeyPropertyId(Resource.Type.Service);
+
+
         // request the components; predicate is null so we'll get them all
         getResources(Resource.Type.Component, cc, request, null);
 
