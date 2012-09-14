@@ -13,8 +13,6 @@ public interface ClusterController {
     // Monitoring ...
     public Iterable<Resource> getResources(Resource.Type type, Request request, Predicate predicate);
 
-    public void addResourceProvider(Resource.Type type, ResourceProvider provider);
-
     public Schema getSchema(Resource.Type type);
 
     // Management ... TBD

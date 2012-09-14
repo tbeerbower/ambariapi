@@ -9,6 +9,7 @@ import java.util.Map;
  * enumeration containing all of the supported resource types.
  */
 public interface Resource {
+    public Type getType();
 
     public Map<String, Map<String, String>> getCategories();
 

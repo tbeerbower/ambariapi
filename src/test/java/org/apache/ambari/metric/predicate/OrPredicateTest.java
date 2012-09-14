@@ -17,7 +17,7 @@ public class OrPredicateTest {
 
     @Test
     public void testApply() {
-        Resource resource = new ResourceImpl();
+        Resource resource = new ResourceImpl(Resource.Type.HostComponent);
         PropertyIdImpl propertyId1 = new PropertyIdImpl("property1", "category1", false);
         PropertyIdImpl propertyId2 = new PropertyIdImpl("property2", "category1", false);
         PropertyIdImpl propertyId3 = new PropertyIdImpl("property3", "category1", false);

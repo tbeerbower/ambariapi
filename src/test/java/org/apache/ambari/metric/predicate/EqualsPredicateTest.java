@@ -17,7 +17,7 @@ public class EqualsPredicateTest {
 
     @Test
     public void testApply() {
-        Resource resource = new ResourceImpl();
+        Resource resource = new ResourceImpl(Resource.Type.HostComponent);
         PropertyIdImpl propertyId = new PropertyIdImpl("foo", "category1", false);
         Predicate predicate = new EqualsPredicate(propertyId, "bar");
 

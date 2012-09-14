@@ -1,11 +1,11 @@
 package org.apache.ambari.metric.jdbc;
 
 import org.apache.ambari.metric.internal.AbstractResourceProvider;
+import org.apache.ambari.metric.internal.PropertyIdImpl;
 import org.apache.ambari.metric.internal.ResourceImpl;
 import org.apache.ambari.metric.internal.SchemaImpl;
 import org.apache.ambari.metric.spi.Predicate;
 import org.apache.ambari.metric.spi.PropertyId;
-import org.apache.ambari.metric.internal.PropertyIdImpl;
 import org.apache.ambari.metric.spi.PropertyProvider;
 import org.apache.ambari.metric.spi.Request;
 import org.apache.ambari.metric.spi.Resource;
@@ -16,7 +16,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -26,43 +25,30 @@ import java.util.Set;
  */
 public abstract class JDBCResourceProvider extends AbstractResourceProvider {
 
-    private static final Set<PropertyId> RESOURCE_PROPERTY_IDS = new HashSet<PropertyId>();
+    private final Resource.Type type;
 
-    static {
-        RESOURCE_PROPERTY_IDS.add(new PropertyIdImpl("role_id", "HostRoles", false));
-        RESOURCE_PROPERTY_IDS.add(new PropertyIdImpl("cluster_name", "HostRoles", false));
-        RESOURCE_PROPERTY_IDS.add(new PropertyIdImpl("host_name", "HostRoles", false));
-        RESOURCE_PROPERTY_IDS.add(new PropertyIdImpl("component_name", "HostRoles", false));
-        RESOURCE_PROPERTY_IDS.add(new PropertyIdImpl("state", "HostRoles", false));
-    }
-
-    private static final Map<Resource.Type, PropertyId> KEY_PROPERTY_IDS = new HashMap<Resource.Type, PropertyId>();
-
-    static {
-        KEY_PROPERTY_IDS.put(Resource.Type.Cluster,   new PropertyIdImpl("cluster_name",   "HostRoles", false));
-        KEY_PROPERTY_IDS.put(Resource.Type.Host,      new PropertyIdImpl("host_name",      "HostRoles", false));
-        KEY_PROPERTY_IDS.put(Resource.Type.Component, new PropertyIdImpl("component_name", "HostRoles", false));
-    }
-
+    private final Set<PropertyId> propertyIds;
 
     private final Schema schema;
 
-    protected JDBCResourceProvider() {
-        schema = new SchemaImpl(this, KEY_PROPERTY_IDS);
+    protected JDBCResourceProvider(Resource.Type type, Set<PropertyId> propertyIds, Map<String, PropertyId> keyPropertyIds) {
+        this.type = type;
+        this.propertyIds = propertyIds;
+        schema = new SchemaImpl(this, keyPropertyIds);
     }
 
     @Override
     public Set<Resource> getResources(Request request, Predicate predicate) {
 
         Set<Resource> resources = new HashSet<Resource>();
-        Set<PropertyId> propertyIds = request.getPropertyIds();
-        if ( propertyIds == null || propertyIds.isEmpty() ) {
-            propertyIds = RESOURCE_PROPERTY_IDS;
+        Set<PropertyId> propertyIds = new HashSet<PropertyId>(request.getPropertyIds());
+        if (propertyIds.isEmpty()) {
+            propertyIds.addAll(this.propertyIds);
         } else {
             if (predicate != null) {
                 propertyIds.addAll(predicate.getPropertyIds());
             }
-            propertyIds.retainAll(RESOURCE_PROPERTY_IDS);
+            propertyIds.retainAll(this.propertyIds);
         }
 
         try {
@@ -84,7 +70,7 @@ public abstract class JDBCResourceProvider extends AbstractResourceProvider {
                     ResultSetMetaData metaData    = rs.getMetaData();
                     int               columnCount = metaData.getColumnCount();
 
-                    final ResourceImpl resource = new ResourceImpl();
+                    final ResourceImpl resource = new ResourceImpl(type);
                     for (int i = 1; i <= columnCount; ++i) {
                         PropertyIdImpl propertyId = new PropertyIdImpl(metaData.getColumnName(i), metaData.getTableName(i), false);
 
@@ -150,7 +136,7 @@ public abstract class JDBCResourceProvider extends AbstractResourceProvider {
 
         String sql = "select " + columns + " from " + tables;
 
-        if (propertyIds.containsAll(predicate.getPropertyIds())) {
+        if (predicate != null && propertyIds.containsAll(predicate.getPropertyIds())) {
             String whereClause = null;
             try {
                 whereClause = predicate.toSQL();
@@ -172,7 +158,7 @@ public abstract class JDBCResourceProvider extends AbstractResourceProvider {
 
     @Override
     public Set<PropertyId> getPropertyIds() {
-        return RESOURCE_PROPERTY_IDS;
+        return propertyIds;
     }
 
     @Override

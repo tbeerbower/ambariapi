@@ -6,13 +6,29 @@ import org.apache.ambari.metric.spi.PropertyId;
  *
  */
 public class PropertyIdImpl implements PropertyId {
-    private final String name;
-    private final String category;
-    private final boolean temporal;
+    private String name;
+    private String category;
+    private boolean temporal;
+
+    public PropertyIdImpl() {
+
+    }
 
     public PropertyIdImpl(String name, String category, boolean temporal) {
         this.name = name;
         this.category = category;
+        this.temporal = temporal;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setTemporal(boolean temporal) {
         this.temporal = temporal;
     }
 

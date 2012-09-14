@@ -15,16 +15,16 @@ import java.util.Set;
  */
 public class SchemaImpl implements Schema {
     private final AbstractResourceProvider resourceProvider;
-    private final Map<Resource.Type, PropertyId> keyPropertyIds;
+    private final Map<String, PropertyId> keyPropertyIds;
 
-    public SchemaImpl(AbstractResourceProvider resourceProvider, Map<Resource.Type, PropertyId> keyPropertyIds) {
+    public SchemaImpl(AbstractResourceProvider resourceProvider, Map<String, PropertyId> keyPropertyIds) {
         this.resourceProvider = resourceProvider;
         this.keyPropertyIds   = keyPropertyIds;
     }
 
     @Override
     public PropertyId getKeyPropertyId(Resource.Type type) {
-        return keyPropertyIds.get(type);
+        return keyPropertyIds.get(type.toString());
     }
 
     @Override

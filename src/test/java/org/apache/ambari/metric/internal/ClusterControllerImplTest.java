@@ -30,38 +30,17 @@ public class ClusterControllerImplTest {
     public void testGetResources() throws Exception {
 
         // create a cluster controller
-        ClusterController cc = new ClusterControllerImpl();
+        ClusterController cc = ClusterControllerImpl.getSingleton();
 
-        // add a resource provider for host_component resources
-        final ResourceProvider resourceProvider = new SQLiteResourceProvider("jdbc:sqlite:src/test/resources/data.db");
-        cc.addResourceProvider(Resource.Type.HostComponent, resourceProvider);
-
-
-        final PropertyProvider pp1 = new JMXPropertyProvider();
-        resourceProvider.addPropertyProvider(pp1);
-
-        final PropertyProvider pp2 = new GangliaPropertyProvider();
-        resourceProvider.addPropertyProvider(pp2);
 
         // populate the request object with the categories that we want to get
         Set<PropertyId> propertyIds = new HashSet<PropertyId>();
-        propertyIds.add(new PropertyIdImpl("cluster_name"  , "HostRoles", false));
-        propertyIds.add(new PropertyIdImpl("host_name"     , "HostRoles", false));
-        propertyIds.add(new PropertyIdImpl("component_name", "HostRoles", false));
-        propertyIds.add(new PropertyIdImpl("state"         , "HostRoles", false));
-
-        propertyIds.add(new PropertyIdImpl("memNonHeapUsedM"     , "jvm", false));
-        propertyIds.add(new PropertyIdImpl("memNonHeapCommittedM", "jvm", false));
-        propertyIds.add(new PropertyIdImpl("memHeapUsedM"        , "jvm", false));
-        propertyIds.add(new PropertyIdImpl("memHeapCommittedM"   , "jvm", false));
-
-        propertyIds.add(new PropertyIdImpl("cpu_nice" , null, true));
-//        propertyIds.add(new PropertyId("disk_free", null, true));
-//        propertyIds.add(new PropertyId("mem_free" , null, true));
-//        propertyIds.add(new PropertyId("bytes_in" , null, true));
+//        propertyIds.add(new PropertyIdImpl("cluster_name"  , "HostRoles", false));
+//        propertyIds.add(new PropertyIdImpl("host_name"     , "HostRoles", false));
+//        propertyIds.add(new PropertyIdImpl("component_name", "HostRoles", false));
+//        propertyIds.add(new PropertyIdImpl("state"         , "HostRoles", false));
 
         Request request = new RequestImpl(propertyIds);
-
 
         Predicate equalsPredicate1 = new EqualsPredicate(new PropertyIdImpl("cluster_name", "HostRoles", false), "tbmetrictest");
         Predicate equalsPredicate2 = new EqualsPredicate(new PropertyIdImpl("component_name", "HostRoles", false), "DATANODE");
@@ -69,21 +48,36 @@ public class ClusterControllerImplTest {
         Predicate equalsPredicate4 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "domu-12-31-39-16-c1-48.compute-1.internal");
         Predicate orPredicate = new OrPredicate(equalsPredicate3, equalsPredicate4);
 
-//        Predicate equalsPredicate1 = new EqualsPredicate(new PropertyId("component_name", "HostRoles", false), "NAMENODE");
         Predicate andPredicate = new AndPredicate(equalsPredicate1, equalsPredicate2, orPredicate);
 
-        // request the host_component resources; predicate is null so we'll get them all
-        Iterable<Resource> i = cc.getResources(Resource.Type.HostComponent, request, andPredicate);
+        // request the host_component resources
+        getResources(Resource.Type.HostComponent, cc, request, andPredicate);
 
-        int cnt = 0;
+        // request the hosts; predicate is null so we'll get them all
+        getResources(Resource.Type.Host, cc, request, null);
+
+        // request the clusters; predicate is null so we'll get them all
+        getResources(Resource.Type.Cluster, cc, request, null);
+
+        // request the services; predicate is null so we'll get them all
+        getResources(Resource.Type.Service, cc, request, null);
+
+        // request the components; predicate is null so we'll get them all
+        getResources(Resource.Type.Component, cc, request, null);
+
+    }
+
+    private void getResources(Resource.Type type, ClusterController cc, Request request, Predicate predicate) {
+        Iterable<Resource> i;
+        int cnt;
+        i = cc.getResources(type, request, predicate);
+
+        cnt = 0;
         for (Resource r : i) {
             System.out.println( r + "\n\n");
             ++cnt;
         }
         System.out.println("Number of resources " + cnt);
-
-        //assert...
-
     }
 }
 
