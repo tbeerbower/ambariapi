@@ -48,10 +48,10 @@
     "Component":
     {
         "DB":[
-            {"name" : "service_name",          "category" : "ServiceComponents", "temporal" : false },
-            {"name" : "component_name",          "category" : "ServiceComponents", "temporal" : false },
-            {"name" : "display_name",          "category" : "ServiceComponents", "temporal" : false },
-            {"name" : "description",          "category" : "ServiceComponents", "temporal" : false }
+            {"name" : "cluster_name",          "category" : "ServiceComponentInfo", "temporal" : false },
+            {"name" : "service_name",          "category" : "ServiceComponentInfo", "temporal" : false },
+            {"name" : "component_name",          "category" : "ServiceComponentInfo", "temporal" : false },
+            {"name" : "state",          "category" : "ServiceComponentInfo", "temporal" : false }
         ],
         "JMX":[
             {"name" : "foo",        "category" : "JMX", "temporal" : false }
