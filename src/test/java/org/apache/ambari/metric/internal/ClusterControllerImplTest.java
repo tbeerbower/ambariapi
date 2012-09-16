@@ -34,11 +34,11 @@ public class ClusterControllerImplTest {
 
         Request request = new RequestImpl(propertyIds);
 
-        Predicate equalsPredicate1 = new EqualsPredicate(new PropertyIdImpl("cluster_name", "HostRoles", false), "tbmetrictest");
-        Predicate equalsPredicate2 = new EqualsPredicate(new PropertyIdImpl("component_name", "HostRoles", false), "DATANODE");
-        Predicate equalsPredicate3 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "ip-10-110-19-142.ec2.internal");
-        Predicate equalsPredicate4 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "domu-12-31-39-16-c1-48.compute-1.internal");
-        Predicate orPredicate = new OrPredicate(equalsPredicate3, equalsPredicate4);
+        EqualsPredicate equalsPredicate1 = new EqualsPredicate(new PropertyIdImpl("cluster_name", "HostRoles", false), "tbmetrictest");
+        EqualsPredicate equalsPredicate2 = new EqualsPredicate(new PropertyIdImpl("component_name", "HostRoles", false), "DATANODE");
+        EqualsPredicate equalsPredicate3 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "ip-10-110-19-142.ec2.internal");
+        EqualsPredicate equalsPredicate4 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "domu-12-31-39-16-c1-48.compute-1.internal");
+        OrPredicate orPredicate = new OrPredicate(equalsPredicate3, equalsPredicate4);
 
         Predicate andPredicate = new AndPredicate(equalsPredicate1, equalsPredicate2, orPredicate);
 

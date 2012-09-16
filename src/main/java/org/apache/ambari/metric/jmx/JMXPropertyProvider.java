@@ -6,9 +6,11 @@ import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.PropertyProvider;
 import org.apache.ambari.metric.spi.Request;
 import org.apache.ambari.metric.spi.Resource;
+import org.apache.ambari.metric.utilities.PredicateHelper;
 import org.apache.ambari.metric.utilities.Properties;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,12 +48,12 @@ public class JMXPropertyProvider implements PropertyProvider {
             return;
         }
 
-        Set<PropertyId> ids = request.getPropertyIds();
+        Set<PropertyId> ids = new HashSet<PropertyId>(request.getPropertyIds());
         if ( ids == null || ids.isEmpty() ) {
             ids = getPropertyIds();
         } else {
             if (predicate != null) {
-                ids.addAll(predicate.getPropertyIds());
+                ids.addAll(PredicateHelper.getPropertyIds(predicate));
             }
             ids.retainAll(getPropertyIds());
         }
@@ -61,7 +63,7 @@ public class JMXPropertyProvider implements PropertyProvider {
 
         String jmxSource = hostName + ":" + port;
 
-        if (jmxSource == null) {
+        if (hostName == null || port == null || jmxSource == null) {
             return;
         }
 

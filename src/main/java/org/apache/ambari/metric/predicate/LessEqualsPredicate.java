@@ -3,25 +3,23 @@ package org.apache.ambari.metric.predicate;
 import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.Resource;
 
-import java.util.Comparator;
 
 /**
- *
+ * Predicate that checks if a given value is less than or equal to a {@link Resource} property.
  */
 public class LessEqualsPredicate extends ComparisonPredicate{
 
-    public LessEqualsPredicate(PropertyId propertyId, String value, Comparator<String> comparator) {
-        super(propertyId, value, comparator);
+    public LessEqualsPredicate(PropertyId propertyId, Comparable<String> value) {
+        super(propertyId, value);
     }
 
     @Override
-    public boolean apply(Resource resource) {
-        Comparator<String> comparator = getComparator();
-        return comparator.compare(resource.getPropertyValue(getPropertyId()), getValue())<= 0;
+    public boolean evaluate(Resource resource) {
+        return getValue().compareTo(resource.getPropertyValue(getPropertyId()))>= 0;
     }
 
     @Override
-    public String toSQL() throws UnsupportedOperationException {
-        return toSQL("<=");
+    public String getOperator() {
+        return "<=";
     }
 }

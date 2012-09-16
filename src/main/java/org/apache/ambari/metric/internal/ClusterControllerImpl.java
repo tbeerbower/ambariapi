@@ -118,7 +118,7 @@ public class ClusterControllerImpl implements ClusterController{
         private Resource getNextResource() {
             while (iterator.hasNext()) {
                 Resource next = iterator.next();
-                if (predicate == null || predicate.apply(next)) {
+                if (predicate == null || predicate.evaluate(next)) {
                     return next;
                 }
             }

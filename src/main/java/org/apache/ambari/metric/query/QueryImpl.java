@@ -4,6 +4,7 @@ import org.apache.ambari.metric.internal.ClusterControllerImpl;
 import org.apache.ambari.metric.internal.PropertyIdImpl;
 import org.apache.ambari.metric.internal.RequestImpl;
 import org.apache.ambari.metric.predicate.AndPredicate;
+import org.apache.ambari.metric.predicate.BasePredicate;
 import org.apache.ambari.metric.predicate.EqualsPredicate;
 import org.apache.ambari.metric.services.Result;
 import org.apache.ambari.metric.services.ResultImpl;
@@ -115,7 +116,7 @@ public class QueryImpl implements Query {
         Map<Resource.Type, String> mapResourceIds = resourceDefinition.getResourceIds();
         Schema schema = getClusterController().getSchema(resourceType);
 
-        Predicate[] predicates = new Predicate[mapResourceIds.size()];
+        BasePredicate[] predicates = new BasePredicate[mapResourceIds.size()];
         int count = 0;
         for(Map.Entry<Resource.Type, String> entry : mapResourceIds.entrySet()) {
             predicates[count++] = new EqualsPredicate(schema.getKeyPropertyId(entry.getKey()), entry.getValue());

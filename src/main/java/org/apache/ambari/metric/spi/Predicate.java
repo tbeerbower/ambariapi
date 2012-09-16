@@ -8,10 +8,5 @@ import java.util.Set;
  * whether or not it should be included in the returned results.
  */
 public interface Predicate {
-    public boolean apply(Resource resource);
-
-    public Set<PropertyId> getPropertyIds();
-
-    //TODO : added this for optimization... is there a better way?
-    public String toSQL() throws UnsupportedOperationException;
+    public boolean evaluate(Resource resource);
 }

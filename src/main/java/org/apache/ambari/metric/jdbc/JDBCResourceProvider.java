@@ -5,6 +5,7 @@ import org.apache.ambari.metric.internal.PropertyIdImpl;
 import org.apache.ambari.metric.internal.ResourceImpl;
 import org.apache.ambari.metric.internal.SchemaImpl;
 import org.apache.ambari.metric.jmx.JMXPropertyProvider;
+import org.apache.ambari.metric.predicate.PredicateVisitorAcceptor;
 import org.apache.ambari.metric.spi.Predicate;
 import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.PropertyProvider;
@@ -13,6 +14,7 @@ import org.apache.ambari.metric.spi.Resource;
 import org.apache.ambari.metric.spi.ResourceProvider;
 import org.apache.ambari.metric.spi.Schema;
 import org.apache.ambari.metric.utilities.DBHelper;
+import org.apache.ambari.metric.utilities.PredicateHelper;
 import org.apache.ambari.metric.utilities.Properties;
 
 import java.sql.Connection;
@@ -56,7 +58,7 @@ public class JDBCResourceProvider extends AbstractResourceProvider {
             propertyIds.addAll(this.propertyIds);
         } else {
             if (predicate != null) {
-                propertyIds.addAll(predicate.getPropertyIds());
+                propertyIds.addAll(PredicateHelper.getPropertyIds(predicate));
             }
             propertyIds.retainAll(this.propertyIds);
         }
@@ -131,10 +133,15 @@ public class JDBCResourceProvider extends AbstractResourceProvider {
 
         String sql = "select " + columns + " from " + tables;
 
-        if (predicate != null && propertyIds.containsAll(predicate.getPropertyIds())) {
+        if (predicate != null &&
+                propertyIds.containsAll(PredicateHelper.getPropertyIds(predicate)) &&
+                predicate instanceof PredicateVisitorAcceptor) {
             String whereClause = null;
             try {
-                whereClause = predicate.toSQL();
+                SQLPredicateVisitor visitor = new SQLPredicateVisitor();
+                ((PredicateVisitorAcceptor)predicate).accept(visitor);
+                whereClause = visitor.getSQL();
+
             } catch (UnsupportedOperationException e) {
                 // Do nothing ... just get all the rows
             }

@@ -5,27 +5,28 @@ import org.apache.ambari.metric.spi.Resource;
 
 
 /**
- *
+ * Predicate which evaluates to true if all of the predicates in a predicate
+ * array evaluate to true.
  */
 public class AndPredicate extends ArrayPredicate {
 
-    public AndPredicate(Predicate ... predicates) {
+    public AndPredicate(BasePredicate ... predicates) {
         super(predicates);
     }
 
     @Override
-    public boolean apply(Resource resource) {
+    public boolean evaluate(Resource resource) {
         Predicate[] predicates = getPredicates();
-        for (int i = 0; i < predicates.length; i++) {
-            if (!predicates[i].apply(resource)) {
-                 return false;
+        for (Predicate predicate : predicates) {
+            if (!predicate.evaluate(resource)) {
+                return false;
             }
         }
         return true;
     }
 
     @Override
-    public String toSQL() throws UnsupportedOperationException {
-        return toSQL("AND");
+    public String getOperator() {
+        return "AND";
     }
 }

@@ -1,6 +1,7 @@
 package org.apache.ambari.metric.query;
 
 import org.apache.ambari.metric.internal.PropertyIdImpl;
+import org.apache.ambari.metric.predicate.BasePredicate;
 import org.apache.ambari.metric.predicate.AndPredicate;
 import org.apache.ambari.metric.predicate.EqualsPredicate;
 import org.apache.ambari.metric.resource.ResourceDefinition;
@@ -63,14 +64,14 @@ public class QueryImplTest {
         expect(componentResourceDef.getRelatedResources()).andReturn(setForeign);
         expect(hostComponentResourceDef.getQuery()).andReturn(hostComponentQuery);
 
-        Predicate clusterEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("clusterId", "", false), "clusterName");
-        Predicate serviceEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("serviceId", "", false), "serviceName");
-        Predicate componentEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("componentId", "", false), "componentName");
-        Predicate[] predicates = new Predicate[3];
+        EqualsPredicate clusterEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("clusterId", "", false), "clusterName");
+        EqualsPredicate serviceEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("serviceId", "", false), "serviceName");
+        EqualsPredicate componentEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("componentId", "", false), "componentName");
+        BasePredicate[] predicates = new BasePredicate[3];
         predicates[0] = clusterEqualsPredicate;
         predicates[1] = serviceEqualsPredicate;
         predicates[2] = componentEqualsPredicate;
-        Predicate andPredicate = new AndPredicate(predicates);
+        AndPredicate andPredicate = new AndPredicate(predicates);
 
         expect(controller.getResources(eq(Resource.Type.Component), eq(request), eq(andPredicate))).
                 andReturn(listResources);
@@ -121,9 +122,9 @@ public class QueryImplTest {
 
         expect(componentResourceDef.getId()).andReturn(null).atLeastOnce();
 
-        Predicate clusterEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("clusterId", "", false), "clusterName");
-        Predicate serviceEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("serviceId", "", false), "serviceName");
-        Predicate[] predicates = new Predicate[2];
+        EqualsPredicate clusterEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("clusterId", "", false), "clusterName");
+        EqualsPredicate serviceEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("serviceId", "", false), "serviceName");
+        BasePredicate[] predicates = new BasePredicate[2];
         predicates[0] = clusterEqualsPredicate;
         predicates[1] = serviceEqualsPredicate;
         Predicate andPredicate = new AndPredicate(predicates);

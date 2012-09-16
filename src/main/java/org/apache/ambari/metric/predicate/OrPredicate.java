@@ -1,22 +1,22 @@
 package org.apache.ambari.metric.predicate;
 
-import org.apache.ambari.metric.spi.Predicate;
 import org.apache.ambari.metric.spi.Resource;
 
 /**
- *
+ * Predicate which evaluates to true if any of the predicates in a predicate
+ * array evaluate to true.
  */
 public class OrPredicate extends ArrayPredicate {
 
-    public OrPredicate(Predicate ... predicates) {
+    public OrPredicate(BasePredicate ... predicates) {
         super(predicates);
     }
 
     @Override
-    public boolean apply(Resource resource) {
-        Predicate[] predicates = getPredicates();
-        for (int i = 0; i < predicates.length; i++) {
-            if (predicates[i].apply(resource)) {
+    public boolean evaluate(Resource resource) {
+        BasePredicate[] predicates = getPredicates();
+        for (BasePredicate predicate : predicates) {
+            if (predicate.evaluate(resource)) {
                 return true;
             }
         }
@@ -24,7 +24,7 @@ public class OrPredicate extends ArrayPredicate {
     }
 
     @Override
-    public String toSQL() throws UnsupportedOperationException {
-        return toSQL("OR");
+    public String getOperator() {
+        return "OR";
     }
 }

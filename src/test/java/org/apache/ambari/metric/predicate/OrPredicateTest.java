@@ -22,19 +22,19 @@ public class OrPredicateTest {
         PropertyIdImpl propertyId2 = new PropertyIdImpl("property2", "category1", false);
         PropertyIdImpl propertyId3 = new PropertyIdImpl("property3", "category1", false);
 
-        Predicate predicate1 = new EqualsPredicate(propertyId1, "v1");
-        Predicate predicate2 = new EqualsPredicate(propertyId2, "v2");
-        Predicate predicate3 = new EqualsPredicate(propertyId3, "v3");
+        EqualsPredicate predicate1 = new EqualsPredicate(propertyId1, "v1");
+        EqualsPredicate predicate2 = new EqualsPredicate(propertyId2, "v2");
+        EqualsPredicate predicate3 = new EqualsPredicate(propertyId3, "v3");
 
-        Predicate orPredicate = new OrPredicate(predicate1, predicate2, predicate3);
+        OrPredicate orPredicate = new OrPredicate(predicate1, predicate2, predicate3);
 
         resource.setProperty(propertyId1, "big");
         resource.setProperty(propertyId2, "monkey");
         resource.setProperty(propertyId3, "runner");
-        Assert.assertFalse(orPredicate.apply(resource));
+        Assert.assertFalse(orPredicate.evaluate(resource));
 
         resource.setProperty(propertyId2, "v2");
-        Assert.assertTrue(orPredicate.apply(resource));
+        Assert.assertTrue(orPredicate.evaluate(resource));
     }
 
     @Test
@@ -43,11 +43,11 @@ public class OrPredicateTest {
         PropertyIdImpl propertyId2 = new PropertyIdImpl("property2", "category1", false);
         PropertyIdImpl propertyId3 = new PropertyIdImpl("property3", "category1", false);
 
-        Predicate predicate1 = new EqualsPredicate(propertyId1, "v1");
-        Predicate predicate2 = new EqualsPredicate(propertyId2, "v2");
-        Predicate predicate3 = new EqualsPredicate(propertyId3, "v3");
+        EqualsPredicate predicate1 = new EqualsPredicate(propertyId1, "v1");
+        EqualsPredicate predicate2 = new EqualsPredicate(propertyId2, "v2");
+        EqualsPredicate predicate3 = new EqualsPredicate(propertyId3, "v3");
 
-        Predicate orPredicate = new OrPredicate(predicate1, predicate2, predicate3);
+        OrPredicate orPredicate = new OrPredicate(predicate1, predicate2, predicate3);
 
         Set<PropertyId> ids = orPredicate.getPropertyIds();
 

@@ -1,15 +1,14 @@
 package org.apache.ambari.metric.predicate;
 
-import org.apache.ambari.metric.spi.Predicate;
 import org.apache.ambari.metric.spi.PropertyId;
 
 import java.util.Collections;
 import java.util.Set;
 
 /**
- *
+ * Predicate that is associated with a resource property.
  */
-public abstract class PropertyPredicate implements Predicate {
+public abstract class PropertyPredicate implements BasePredicate {
     private final PropertyId propertyId;
 
     public PropertyPredicate(PropertyId propertyId) {
@@ -21,25 +20,24 @@ public abstract class PropertyPredicate implements Predicate {
         return Collections.singleton(propertyId);
     }
 
-    protected PropertyId getPropertyId() {
+    public PropertyId getPropertyId() {
         return propertyId;
     }
 
     @Override
-    public String toSQL() throws UnsupportedOperationException {
-        return (propertyId.getCategory() == null ? "" : propertyId.getCategory() + ".") + propertyId.getName();
-    }
-
-    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PropertyPredicate)) return false;
+
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof PropertyPredicate)) {
+            return false;
+        }
 
         PropertyPredicate that = (PropertyPredicate) o;
 
-        if (propertyId != null ? !propertyId.equals(that.propertyId) : that.propertyId != null) return false;
-
-        return true;
+        return propertyId == null ? that.propertyId == null : propertyId.equals(that.propertyId);
     }
 
     @Override

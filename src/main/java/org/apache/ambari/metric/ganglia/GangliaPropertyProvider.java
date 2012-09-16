@@ -7,6 +7,7 @@ import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.PropertyProvider;
 import org.apache.ambari.metric.spi.Request;
 import org.apache.ambari.metric.spi.Resource;
+import org.apache.ambari.metric.utilities.PredicateHelper;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -72,12 +73,12 @@ public class GangliaPropertyProvider implements PropertyProvider {
     @Override
     public void populateResource(Resource resource, Request request, Predicate predicate) {
 
-        Set<PropertyId> ids = request.getPropertyIds();
+        Set<PropertyId> ids = new HashSet<PropertyId>(request.getPropertyIds());
         if ( ids == null || ids.isEmpty() ) {
             ids = getPropertyIds();
         } else {
             if (predicate != null) {
-                ids.addAll(predicate.getPropertyIds());
+                ids.addAll(PredicateHelper.getPropertyIds(predicate));
             }
             ids.retainAll(getPropertyIds());
         }

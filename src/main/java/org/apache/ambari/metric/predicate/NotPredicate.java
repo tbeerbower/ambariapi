@@ -1,33 +1,23 @@
 package org.apache.ambari.metric.predicate;
 
-import org.apache.ambari.metric.spi.Predicate;
-import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.Resource;
 
-import java.util.Set;
-
 /**
- *
+ * Predicate that negates the evaluation of another predicate.
  */
-public class NotPredicate implements Predicate {
-    private final Predicate predicate;
+public class NotPredicate extends UnaryPredicate {
 
-    public NotPredicate(Predicate predicate) {
-        this.predicate = predicate;
+    public NotPredicate(BasePredicate predicate) {
+        super(predicate);
     }
 
     @Override
-    public boolean apply(Resource resource) {
-        return !predicate.apply(resource);
+    public boolean evaluate(Resource resource) {
+        return !getPredicate().evaluate(resource);
     }
 
     @Override
-    public Set<PropertyId> getPropertyIds() {
-        return predicate.getPropertyIds();
-    }
-
-    @Override
-    public String toSQL() throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
+    public String getOperator() {
+        return "NOT";
     }
 }

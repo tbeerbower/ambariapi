@@ -1,6 +1,5 @@
 package org.apache.ambari.metric.predicate;
 
-import org.apache.ambari.metric.spi.Predicate;
 import org.apache.ambari.metric.spi.PropertyId;
 
 import java.util.Arrays;
@@ -9,44 +8,26 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * Predicate which evaluates an array of predicates.
  */
-public abstract class ArrayPredicate implements Predicate {
-    private final Predicate[] predicates;
+public abstract class ArrayPredicate implements BasePredicate {
+    private final BasePredicate[] predicates;
     private final Set<PropertyId> propertyIds = new HashSet<PropertyId>();
 
-    public ArrayPredicate(Predicate ... predicates) {
+    public ArrayPredicate(BasePredicate ... predicates) {
         this.predicates = predicates;
-        for (int i = 0; i < predicates.length; i++) {
-            propertyIds.addAll(predicates[i].getPropertyIds());
+        for (BasePredicate predicate : predicates) {
+            propertyIds.addAll(predicate.getPropertyIds());
         }
     }
 
-    protected Predicate[] getPredicates() {
+    public BasePredicate[] getPredicates() {
         return predicates;
     }
 
     @Override
     public Set<PropertyId> getPropertyIds() {
         return propertyIds;
-    }
-
-    protected String toSQL(String operator) {
-        Predicate[] predicates = getPredicates();
-        if (predicates.length == 0) {
-            return "";
-        }
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        for (int i = 0; i < predicates.length; i++) {
-            if (i > 0) {
-                sb.append(" " + operator + " ");
-            }
-            sb.append(predicates[i].toSQL());
-        }
-        sb.append(")");
-        return sb.toString();
     }
 
     @Override
@@ -59,10 +40,10 @@ public abstract class ArrayPredicate implements Predicate {
         if (propertyIds != null ? !propertyIds.equals(that.propertyIds) : that.propertyIds != null) return false;
 
         // don't care about array order
-        List<Predicate> listPredicates = Arrays.asList(predicates);
+        List<BasePredicate> listPredicates = Arrays.asList(predicates);
         if (listPredicates.size() != that.predicates.length) return false;
-        for (int i = 0; i < predicates.length; ++i) {
-            if (! listPredicates.contains(predicates[i])) return false;
+        for (BasePredicate predicate : predicates) {
+            if (!listPredicates.contains(predicate)) return false;
         }
 
         return true;
@@ -74,4 +55,11 @@ public abstract class ArrayPredicate implements Predicate {
         result = 31 * result + (propertyIds != null ? propertyIds.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public void accept(PredicateVisitor visitor) {
+        visitor.acceptArrayPredicate(this);
+    }
+
+    public abstract String getOperator();
 }
