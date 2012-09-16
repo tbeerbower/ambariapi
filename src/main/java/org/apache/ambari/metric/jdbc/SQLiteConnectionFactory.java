@@ -9,7 +9,9 @@ import java.sql.SQLException;
  */
 public class SQLiteConnectionFactory implements ConnectionFactory {
 
-    public static final String CONNECTION_URL = "jdbc:sqlite:src/test/resources/data.db";
+    private static String DB_FILE_NAME = System.getProperty("ambariapi.dbfile", "src/test/resources/data.db");
+
+    public static final String CONNECTION_URL = "jdbc:sqlite:" + DB_FILE_NAME;
 
     public SQLiteConnectionFactory() {
         try {
