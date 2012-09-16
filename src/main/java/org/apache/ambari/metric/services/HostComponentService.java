@@ -1,6 +1,8 @@
 package org.apache.ambari.metric.services;
 
 import org.apache.ambari.metric.resource.HostComponentResourceDefinition;
+import org.apache.ambari.metric.resource.HostResourceDefinition;
+import org.apache.ambari.metric.resource.ResourceDefinition;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -49,7 +51,7 @@ public class HostComponentService extends BaseService {
                                      @PathParam("hostComponentName") String hostComponentName) {
 
         return handleRequest(headers, ui, Request.RequestType.GET,
-                new HostComponentResourceDefinition(hostComponentName, m_clusterName, m_hostName));
+                createResourceDefinition(hostComponentName, m_clusterName, m_hostName));
     }
 
     /**
@@ -64,6 +66,20 @@ public class HostComponentService extends BaseService {
     @GET @Produces(MediaType.APPLICATION_JSON)
     public Response getHostComponents(@Context HttpHeaders headers, @Context UriInfo ui) {
         return handleRequest(headers, ui, Request.RequestType.GET,
-                new HostComponentResourceDefinition(null, m_clusterName, m_hostName));
+                createResourceDefinition(null, m_clusterName, m_hostName));
+    }
+
+    /**
+     * Create a host_component resource definition.
+     *
+     * @param hostComponentName  host_component name
+     * @param clusterName        cluster name
+     * @param hostName           host name
+
+     *
+     * @return a host resource definition
+     */
+    ResourceDefinition createResourceDefinition(String hostComponentName, String clusterName, String hostName) {
+        return new HostComponentResourceDefinition(hostComponentName, clusterName, hostName);
     }
 }

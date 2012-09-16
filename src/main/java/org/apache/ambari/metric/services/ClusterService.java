@@ -78,7 +78,7 @@ public class ClusterService extends BaseService {
      *
      * @return a cluster resource definition
      */
-    private ResourceDefinition createResourceDefinition(String clusterName) {
+    ResourceDefinition createResourceDefinition(String clusterName) {
         return new ClusterResourceDefinition(clusterName);
     }
 }

@@ -1,5 +1,6 @@
 package org.apache.ambari.metric.services;
 
+import org.apache.ambari.metric.resource.ResourceDefinition;
 import org.apache.ambari.metric.resource.ServiceResourceDefinition;
 
 import javax.ws.rs.GET;
@@ -42,7 +43,7 @@ public class ServiceService extends BaseService {
                             @PathParam("serviceName") String serviceName) {
 
         return handleRequest(headers, ui, Request.RequestType.GET,
-                new ServiceResourceDefinition(serviceName, m_clusterName));
+                createResourceDefinition(serviceName, m_clusterName));
     }
 
     /**
@@ -57,7 +58,7 @@ public class ServiceService extends BaseService {
     @GET @Produces(MediaType.APPLICATION_JSON)
     public Response getServices(@Context HttpHeaders headers, @Context UriInfo ui) {
         return handleRequest(headers, ui, Request.RequestType.GET,
-                new ServiceResourceDefinition(null, m_clusterName));
+                createResourceDefinition(null, m_clusterName));
     }
 
     /**
@@ -71,5 +72,17 @@ public class ServiceService extends BaseService {
     public ComponentService getComponentHandler(@PathParam("serviceName") String serviceName) {
 
         return new ComponentService(m_clusterName, serviceName);
+    }
+
+    /**
+     * Create a service resource definition.
+     *
+     * @param serviceName     host name
+     * @param clusterName  cluster name
+     *
+     * @return a service resource definition
+     */
+    ResourceDefinition createResourceDefinition(String serviceName, String clusterName) {
+        return new ServiceResourceDefinition(serviceName, clusterName);
     }
 }

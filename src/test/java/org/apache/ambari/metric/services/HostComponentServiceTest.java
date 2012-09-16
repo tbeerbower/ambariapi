@@ -2,6 +2,8 @@ package org.apache.ambari.metric.services;
 
 import org.apache.ambari.metric.handlers.RequestHandler;
 import org.apache.ambari.metric.resource.HostComponentResourceDefinition;
+import org.apache.ambari.metric.resource.ResourceDefinition;
+import org.apache.ambari.metric.services.formatters.ResultFormatter;
 import org.junit.Test;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -10,6 +12,7 @@ import javax.ws.rs.core.UriInfo;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.EasyMock.eq;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 /**
  * Created with IntelliJ IDEA.
@@ -21,6 +24,9 @@ import static org.junit.Assert.assertSame;
 public class HostComponentServiceTest {
     @Test
     public void testGetHostComponent() {
+        ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
+        ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
+        Object formattedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -37,22 +43,29 @@ public class HostComponentServiceTest {
 
         // expectations
         expect(requestFactory.createRequest(eq(httpHeaders), eq(uriInfo), eq(Request.RequestType.GET),
-                eq(new HostComponentResourceDefinition(hostComponentName, clusterName, hostName)))).andReturn(request);
+                eq(resourceDef))).andReturn(request);
 
         expect(requestHandler.handleRequest(request)).andReturn(result);
-        expect(responseFactory.createResponse(result)).andReturn(response);
+        expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
+        expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
 
-        replay(requestFactory, responseFactory, request, requestHandler, result, response, httpHeaders, uriInfo);
+        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+
+        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
 
         //test
-        HostComponentService hostComponentService = new TestHostComponentService(clusterName, hostName, requestFactory, responseFactory, requestHandler);
+        HostComponentService hostComponentService = new TestHostComponentService(resourceDef, clusterName, hostName, hostComponentName,
+                requestFactory, responseFactory, requestHandler);
         assertSame(response, hostComponentService.getHostComponent(httpHeaders, uriInfo, hostComponentName));
 
-        verify(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
     }
 
     @Test
     public void testGetHostComponents() {
+        ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
+        ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
+        Object formattedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -68,30 +81,52 @@ public class HostComponentServiceTest {
 
         // expectations
         expect(requestFactory.createRequest(eq(httpHeaders), eq(uriInfo), eq(Request.RequestType.GET),
-                eq(new HostComponentResourceDefinition(null, clusterName, hostName)))).andReturn(request);
+                eq(resourceDef))).andReturn(request);
 
         expect(requestHandler.handleRequest(request)).andReturn(result);
-        expect(responseFactory.createResponse(result)).andReturn(response);
+        expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
+        expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
 
-        replay(requestFactory, responseFactory, request, requestHandler, result, response, httpHeaders, uriInfo);
+        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+
+        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
 
         //test
-        HostComponentService componentService = new TestHostComponentService(clusterName, hostName, requestFactory, responseFactory, requestHandler);
+        HostComponentService componentService = new TestHostComponentService(resourceDef, clusterName, hostName, null, requestFactory,
+                responseFactory, requestHandler);
         assertSame(response, componentService.getHostComponents(httpHeaders, uriInfo));
 
-        verify(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
     }
 
     private class TestHostComponentService extends HostComponentService {
         private RequestFactory m_requestFactory;
         private ResponseFactory m_responseFactory;
         private RequestHandler m_requestHandler;
+        private ResourceDefinition m_resourceDef;
+        private String m_clusterId;
+        private String m_hostId;
+        private String m_hostComponentId;
 
-        private TestHostComponentService(String clusterId, String hostName, RequestFactory requestFactory, ResponseFactory responseFactory, RequestHandler handler) {
-            super(clusterId, hostName);
+        private TestHostComponentService(ResourceDefinition resourceDef, String clusterId, String hostId, String hostComponentId,
+                                          RequestFactory requestFactory, ResponseFactory responseFactory, RequestHandler handler) {
+            super(clusterId, hostId);
+            m_resourceDef = resourceDef;
+            m_clusterId = clusterId;
+            m_hostId = hostId;
+            m_hostComponentId = hostComponentId;
             m_requestFactory = requestFactory;
             m_responseFactory = responseFactory;
             m_requestHandler = handler;
+        }
+
+
+        @Override
+        ResourceDefinition createResourceDefinition(String hostComponentName, String clusterName, String hostName) {
+            assertEquals(m_clusterId, clusterName);
+            assertEquals(m_hostId, hostName);
+            assertEquals(m_hostComponentId, hostComponentName);
+            return m_resourceDef;
         }
 
         @Override

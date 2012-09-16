@@ -3,6 +3,8 @@ package org.apache.ambari.metric.services;
 
 import org.apache.ambari.metric.handlers.RequestHandler;
 import org.apache.ambari.metric.resource.HostResourceDefinition;
+import org.apache.ambari.metric.resource.ResourceDefinition;
+import org.apache.ambari.metric.services.formatters.ResultFormatter;
 import org.junit.Test;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -10,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 /**
@@ -23,6 +26,9 @@ public class HostServiceTest {
 
     @Test
     public void testGetHost() {
+        ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
+        ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
+        Object formattedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -38,22 +44,28 @@ public class HostServiceTest {
 
         // expectations
         expect(requestFactory.createRequest(eq(httpHeaders), eq(uriInfo), eq(Request.RequestType.GET),
-                eq(new HostResourceDefinition(hostName, clusterName)))).andReturn(request);
+                eq(resourceDef))).andReturn(request);
 
         expect(requestHandler.handleRequest(request)).andReturn(result);
-        expect(responseFactory.createResponse(result)).andReturn(response);
+        expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
+        expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
 
-        replay(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+
+        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
 
         //test
-        HostService hostService = new TestHostService(clusterName, requestFactory, responseFactory, requestHandler);
+        HostService hostService = new TestHostService(resourceDef, clusterName, hostName, requestFactory, responseFactory, requestHandler);
         assertSame(response, hostService.getHost(httpHeaders, uriInfo, hostName));
 
-        verify(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
     }
 
     @Test
     public void testGetHosts() {
+        ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
+        ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
+        Object formattedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -68,30 +80,47 @@ public class HostServiceTest {
 
         // expectations
         expect(requestFactory.createRequest(eq(httpHeaders), eq(uriInfo), eq(Request.RequestType.GET),
-                eq(new HostResourceDefinition(null, clusterName)))).andReturn(request);
+                eq(resourceDef))).andReturn(request);
 
         expect(requestHandler.handleRequest(request)).andReturn(result);
-        expect(responseFactory.createResponse(result)).andReturn(response);
+        expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
+        expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
 
-        replay(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+
+        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
 
         //test
-        HostService hostService = new TestHostService(clusterName, requestFactory, responseFactory, requestHandler);
+        HostService hostService = new TestHostService(resourceDef, clusterName, null, requestFactory, responseFactory, requestHandler);
         assertSame(response, hostService.getHosts(httpHeaders, uriInfo));
 
-        verify(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
     }
 
     private class TestHostService extends HostService {
         private RequestFactory m_requestFactory;
         private ResponseFactory m_responseFactory;
         private RequestHandler m_requestHandler;
+        private ResourceDefinition m_resourceDef;
+        private String m_clusterId;
+        private String m_hostId;
 
-        private TestHostService(String clusterId, RequestFactory requestFactory, ResponseFactory responseFactory, RequestHandler handler) {
+        private TestHostService(ResourceDefinition resourceDef, String clusterId, String hostId, RequestFactory requestFactory,
+                                ResponseFactory responseFactory, RequestHandler handler) {
             super(clusterId);
+            m_resourceDef = resourceDef;
+            m_clusterId = clusterId;
+            m_hostId = hostId;
             m_requestFactory = requestFactory;
             m_responseFactory = responseFactory;
             m_requestHandler = handler;
+        }
+
+        @Override
+        ResourceDefinition createResourceDefinition(String hostName, String clusterName) {
+            assertEquals(m_clusterId, clusterName);
+            assertEquals(m_hostId, hostName);
+            return m_resourceDef;
         }
 
         @Override

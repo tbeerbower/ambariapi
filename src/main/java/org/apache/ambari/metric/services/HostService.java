@@ -81,7 +81,7 @@ public class HostService extends BaseService {
      *
      * @return a host resource definition
      */
-    private ResourceDefinition createResourceDefinition(String hostName, String clusterName) {
+    ResourceDefinition createResourceDefinition(String hostName, String clusterName) {
         return new HostResourceDefinition(hostName, clusterName);
     }
 }

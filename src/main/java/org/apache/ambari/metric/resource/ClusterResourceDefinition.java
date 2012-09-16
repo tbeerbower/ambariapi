@@ -1,5 +1,8 @@
 package org.apache.ambari.metric.resource;
 
+import org.apache.ambari.metric.services.formatters.ClusterInstanceFormatter;
+import org.apache.ambari.metric.services.formatters.CollectionFormatter;
+import org.apache.ambari.metric.services.formatters.ResultFormatter;
 import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.Resource;
 
@@ -18,6 +21,11 @@ public class ClusterResourceDefinition extends BaseResourceDefinition {
 
     public ClusterResourceDefinition(String id) {
         super(Resource.Type.Cluster, id);
+
+        if (id == null) {
+            getQuery().addProperty(getClusterController().getSchema(
+                    Resource.Type.Cluster).getKeyPropertyId(Resource.Type.Cluster));
+        }
     }
 
     @Override
@@ -52,5 +60,11 @@ public class ClusterResourceDefinition extends BaseResourceDefinition {
     @Override
     public Set<ResourceDefinition> getRelatedResources() {
         return Collections.emptySet();
+    }
+
+    @Override
+    public ResultFormatter getResultFormatter() {
+        //todo: instance formatter
+        return getId() == null ? new CollectionFormatter(this) : new ClusterInstanceFormatter(this);
     }
 }

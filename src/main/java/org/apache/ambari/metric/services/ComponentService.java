@@ -1,6 +1,7 @@
 package org.apache.ambari.metric.services;
 
 import org.apache.ambari.metric.resource.ComponentResourceDefinition;
+import org.apache.ambari.metric.resource.ResourceDefinition;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -49,7 +50,7 @@ public class ComponentService extends BaseService {
                                  @PathParam("componentName") String componentName) {
 
         return handleRequest(headers, ui, Request.RequestType.GET,
-                new ComponentResourceDefinition(componentName, m_clusterName, m_serviceName));
+                createResourceDefinition(componentName, m_clusterName, m_serviceName));
     }
 
     /**
@@ -65,6 +66,19 @@ public class ComponentService extends BaseService {
     //
     public Response getComponents(@Context HttpHeaders headers, @Context UriInfo ui) {
         return handleRequest(headers, ui, Request.RequestType.GET,
-                new ComponentResourceDefinition(null, m_clusterName, m_serviceName));
+                createResourceDefinition(null, m_clusterName, m_serviceName));
+    }
+
+    /**
+     * Create a component resource definition.
+     *
+     * @param clusterName    cluster name
+     * @param serviceName    service name
+     * @param componentName  component name
+     *
+     * @return a component resource definition
+     */
+    ResourceDefinition createResourceDefinition(String clusterName, String serviceName, String componentName) {
+        return new ComponentResourceDefinition(clusterName, serviceName, componentName);
     }
 }

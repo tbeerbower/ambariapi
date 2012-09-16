@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
  * To change this template use File | Settings | File Templates.
  */
 public class ResponseFactory {
-    public Response createResponse(Result result) {
+    public Response createResponse(Object result) {
         return Response.ok(result).build();
     }
 }

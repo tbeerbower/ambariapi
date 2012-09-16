@@ -1,7 +1,9 @@
 package org.apache.ambari.metric.services;
 
 import org.apache.ambari.metric.handlers.RequestHandler;
+import org.apache.ambari.metric.resource.ResourceDefinition;
 import org.apache.ambari.metric.resource.ServiceResourceDefinition;
+import org.apache.ambari.metric.services.formatters.ResultFormatter;
 import org.junit.Test;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -10,6 +12,7 @@ import javax.ws.rs.core.UriInfo;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 /**
@@ -23,6 +26,9 @@ public class ServiceServiceTest {
 
     @Test
     public void testGetService() {
+        ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
+        ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
+        Object formattedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -38,22 +44,28 @@ public class ServiceServiceTest {
 
         // expectations
         expect(requestFactory.createRequest(eq(httpHeaders), eq(uriInfo), eq(Request.RequestType.GET),
-                eq(new ServiceResourceDefinition(serviceName, clusterName)))).andReturn(request);
+                eq(resourceDef))).andReturn(request);
 
         expect(requestHandler.handleRequest(request)).andReturn(result);
-        expect(responseFactory.createResponse(result)).andReturn(response);
+        expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
+        expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
 
-        replay(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+
+        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
 
         //test
-        ServiceService hostService = new TestServiceService(clusterName, requestFactory, responseFactory, requestHandler);
+        ServiceService hostService = new TestServiceService(resourceDef, clusterName, serviceName, requestFactory, responseFactory, requestHandler);
         assertSame(response, hostService.getService(httpHeaders, uriInfo, serviceName));
 
-        verify(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
     }
 
     @Test
     public void testGetServices() {
+        ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
+        ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
+        Object formattedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -68,30 +80,47 @@ public class ServiceServiceTest {
 
         // expectations
         expect(requestFactory.createRequest(eq(httpHeaders), eq(uriInfo), eq(Request.RequestType.GET),
-                eq(new ServiceResourceDefinition(null, clusterName)))).andReturn(request);
+                eq(resourceDef))).andReturn(request);
 
         expect(requestHandler.handleRequest(request)).andReturn(result);
-        expect(responseFactory.createResponse(result)).andReturn(response);
+        expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
+        expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
 
-        replay(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+
+        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
 
         //test
-        ServiceService hostService = new TestServiceService(clusterName, requestFactory, responseFactory, requestHandler);
+        ServiceService hostService = new TestServiceService(resourceDef, clusterName, null, requestFactory, responseFactory, requestHandler);
         assertSame(response, hostService.getServices(httpHeaders, uriInfo));
 
-        verify(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
     }
 
     private class TestServiceService extends ServiceService {
         private RequestFactory m_requestFactory;
         private ResponseFactory m_responseFactory;
         private RequestHandler m_requestHandler;
+        private ResourceDefinition m_resourceDef;
+        private String m_clusterId;
+        private String m_serviceId;
 
-        private TestServiceService(String clusterId, RequestFactory requestFactory, ResponseFactory responseFactory, RequestHandler handler) {
+        private TestServiceService(ResourceDefinition resourceDef, String clusterId, String serviceId, RequestFactory requestFactory,
+                                   ResponseFactory responseFactory, RequestHandler handler) {
             super(clusterId);
+            m_resourceDef = resourceDef;
+            m_clusterId = clusterId;
+            m_serviceId = serviceId;
             m_requestFactory = requestFactory;
             m_responseFactory = responseFactory;
             m_requestHandler = handler;
+        }
+
+        @Override
+        ResourceDefinition createResourceDefinition(String serviceName, String clusterName) {
+            assertEquals(m_clusterId, clusterName);
+            assertEquals(m_serviceId, serviceName);
+            return m_resourceDef;
         }
 
         @Override

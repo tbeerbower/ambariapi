@@ -1,5 +1,9 @@
 package org.apache.ambari.metric.resource;
 
+import org.apache.ambari.metric.services.formatters.CollectionFormatter;
+import org.apache.ambari.metric.services.formatters.ComponentInstanceFormatter;
+import org.apache.ambari.metric.services.formatters.InstanceFormatter;
+import org.apache.ambari.metric.services.formatters.ResultFormatter;
 import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.Resource;
 
@@ -52,5 +56,11 @@ public class ComponentResourceDefinition extends BaseResourceDefinition {
         hostComponentResource.getQuery().addProperty(hostIdProperty);
         setResourceDefinitions.add(hostComponentResource);
         return setResourceDefinitions;
+    }
+
+    @Override
+    public ResultFormatter getResultFormatter() {
+        //todo: instance formatter
+        return getId() == null ? new CollectionFormatter(this) : new ComponentInstanceFormatter(this);
     }
 }

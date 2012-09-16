@@ -1,6 +1,7 @@
 package org.apache.ambari.metric.resource;
 
 import org.apache.ambari.metric.query.Query;
+import org.apache.ambari.metric.services.formatters.ResultFormatter;
 import org.apache.ambari.metric.spi.Resource;
 
 import java.util.Map;
@@ -20,6 +21,7 @@ public interface ResourceDefinition {
     public Set<ResourceDefinition> getChildren();
     public Set<ResourceDefinition> getRelatedResources();
     public Map<Resource.Type, String> getResourceIds();
+    public ResultFormatter getResultFormatter();
 
     public Resource.Type getType();
     public Query getQuery();

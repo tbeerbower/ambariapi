@@ -2,6 +2,8 @@ package org.apache.ambari.metric.services;
 
 import org.apache.ambari.metric.handlers.RequestHandler;
 import org.apache.ambari.metric.resource.ClusterResourceDefinition;
+import org.apache.ambari.metric.resource.ResourceDefinition;
+import org.apache.ambari.metric.services.formatters.ResultFormatter;
 import org.junit.Test;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -9,6 +11,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 
@@ -23,6 +26,9 @@ public class ClusterServiceTest {
 
     @Test
     public void testGetCluster() {
+        ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
+        ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
+        Object formattedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -37,22 +43,28 @@ public class ClusterServiceTest {
 
         // expectations
         expect(requestFactory.createRequest(eq(httpHeaders), eq(uriInfo), eq(Request.RequestType.GET),
-                eq(new ClusterResourceDefinition(clusterName)))).andReturn(request);
+                eq(resourceDef))).andReturn(request);
 
         expect(requestHandler.handleRequest(request)).andReturn(result);
-        expect(responseFactory.createResponse(result)).andReturn(response);
+        expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
+        expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
 
-        replay(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+
+        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
 
         //test
-        ClusterService clusterService = new TestClusterService(requestFactory, responseFactory, requestHandler);
+        ClusterService clusterService = new TestClusterService(resourceDef, clusterName, requestFactory, responseFactory, requestHandler);
         assertSame(response, clusterService.getCluster(httpHeaders, uriInfo, clusterName));
 
-        verify(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
     }
 
     @Test
     public void testGetClusters() {
+        ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
+        ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
+        Object formattedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -65,29 +77,43 @@ public class ClusterServiceTest {
 
         // expectations
         expect(requestFactory.createRequest(eq(httpHeaders), eq(uriInfo), eq(Request.RequestType.GET),
-                eq(new ClusterResourceDefinition(null)))).andReturn(request);
+                eq(resourceDef))).andReturn(request);
 
         expect(requestHandler.handleRequest(request)).andReturn(result);
-        expect(responseFactory.createResponse(result)).andReturn(response);
+        expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
+        expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
 
-        replay(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+
+        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
 
         //test
-        ClusterService clusterService = new TestClusterService(requestFactory, responseFactory, requestHandler);
+        ClusterService clusterService = new TestClusterService(resourceDef, null, requestFactory, responseFactory, requestHandler);
         assertSame(response, clusterService.getClusters(httpHeaders, uriInfo));
 
-        verify(requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
     }
 
     private class TestClusterService extends ClusterService {
         private RequestFactory m_requestFactory;
         private ResponseFactory m_responseFactory;
         private RequestHandler m_requestHandler;
+        private ResourceDefinition m_resourceDef;
+        private String m_clusterId;
 
-        private TestClusterService(RequestFactory requestFactory, ResponseFactory responseFactory, RequestHandler handler) {
+        private TestClusterService(ResourceDefinition resourceDef, String clusterId, RequestFactory requestFactory,
+                                   ResponseFactory responseFactory, RequestHandler handler) {
+            m_resourceDef = resourceDef;
             m_requestFactory = requestFactory;
             m_responseFactory = responseFactory;
             m_requestHandler = handler;
+            m_clusterId = clusterId;
+        }
+
+        @Override
+        ResourceDefinition createResourceDefinition(String clusterName) {
+            assertEquals(m_clusterId, clusterName);
+            return m_resourceDef;
         }
 
         @Override
