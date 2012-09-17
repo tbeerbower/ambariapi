@@ -38,7 +38,7 @@ public class ServiceService extends BaseService {
      * @return service resource representation
      */
     @GET @Path("{serviceName}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("text/plain")
     public Response getService(@Context HttpHeaders headers, @Context UriInfo ui,
                             @PathParam("serviceName") String serviceName) {
 
@@ -55,7 +55,8 @@ public class ServiceService extends BaseService {
      *
      * @return service collection resource representation
      */
-    @GET @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Produces("text/plain")
     public Response getServices(@Context HttpHeaders headers, @Context UriInfo ui) {
         return handleRequest(headers, ui, Request.RequestType.GET,
                 createResourceDefinition(null, m_clusterName));

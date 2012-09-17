@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Result formatter for collection resources.
  */
-public class CollectionFormatter implements ResultFormatter {
+public class CollectionFormatter extends BaseFormatter {
     public String href;
     public List<HrefEntry> items = new ArrayList<HrefEntry>();
     private ResourceDefinition m_resourceDefinition;
@@ -38,7 +38,7 @@ public class CollectionFormatter implements ResultFormatter {
             items.add(new HrefEntry(itemHref + r.getPropertyValue(m_schema.getKeyPropertyId(
                     m_resourceDefinition.getType()))));
         }
-        return this;
+        return serialize(this);
     }
 
     public static class HrefEntry {

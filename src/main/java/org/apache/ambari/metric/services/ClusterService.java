@@ -26,7 +26,7 @@ public class ClusterService extends BaseService {
      * @return cluster instance representation
      */
     @GET @Path("{clusterName}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("text/plain")
     public Response getCluster(@Context HttpHeaders headers, @Context UriInfo ui,
                                @PathParam("clusterName") String clusterName) {
 
@@ -42,7 +42,8 @@ public class ClusterService extends BaseService {
      *
      * @return cluster collection resource representation
      */
-    @GET @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Produces("text/plain")
     public Response getClusters(@Context HttpHeaders headers, @Context UriInfo ui) {
         return handleRequest(headers, ui, Request.RequestType.GET, createResourceDefinition(null));
     }

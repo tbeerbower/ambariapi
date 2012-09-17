@@ -5,8 +5,11 @@ import org.apache.ambari.metric.resource.ResourceDefinition;
 import org.apache.ambari.metric.services.Result;
 import org.apache.ambari.metric.spi.Resource;
 import org.apache.ambari.metric.spi.Schema;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -16,7 +19,7 @@ import java.util.*;
  * Time: 9:11 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ClusterInstanceFormatter implements ResultFormatter {
+public class ClusterInstanceFormatter extends BaseFormatter {
     public String href;
     public List<HrefEntry> services = new ArrayList<HrefEntry>();
     public List<HrefEntry> hosts = new ArrayList<HrefEntry>();
@@ -50,8 +53,7 @@ public class ClusterInstanceFormatter implements ResultFormatter {
 
             }
         }
-
-        return this;
+        return serialize(this);
     }
 
     public static class HrefEntry {

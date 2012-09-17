@@ -17,7 +17,7 @@ import java.util.*;
  * Time: 2:05 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ServiceInstanceFormatter implements ResultFormatter {
+public class ServiceInstanceFormatter extends BaseFormatter {
 
     public String href;
     public List<HrefEntry> components = new ArrayList<HrefEntry>();
@@ -55,7 +55,7 @@ public class ServiceInstanceFormatter implements ResultFormatter {
             }
         }
 
-        return this;
+        return serialize(this);
     }
 
     public static class HrefEntry {

@@ -45,7 +45,7 @@ public class ComponentService extends BaseService {
      * @return a component resource representation
      */
     @GET @Path("{componentName}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("text/plain")
     public Response getComponent(@Context HttpHeaders headers, @Context UriInfo ui,
                                  @PathParam("componentName") String componentName) {
 
@@ -62,8 +62,8 @@ public class ComponentService extends BaseService {
      *
      * @return component collection resource representation
      */
-    @GET @Produces(MediaType.APPLICATION_JSON)
-    //
+    @GET
+    @Produces("text/plain")
     public Response getComponents(@Context HttpHeaders headers, @Context UriInfo ui) {
         return handleRequest(headers, ui, Request.RequestType.GET,
                 createResourceDefinition(null, m_clusterName, m_serviceName));

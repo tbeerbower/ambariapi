@@ -38,8 +38,9 @@ public class HostService extends BaseService {
      *
      * @return host resource representation
      */
-    @GET @Path("{hostName}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("{hostName}")
+    @Produces("text/plain")
     public Response getHost(@Context HttpHeaders headers, @Context UriInfo ui,
                             @PathParam("hostName") String hostName) {
 
@@ -56,7 +57,8 @@ public class HostService extends BaseService {
      *
      * @return host collection resource representation
      */
-    @GET @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Produces("text/plain")
     public Response getHosts(@Context HttpHeaders headers, @Context UriInfo ui) {
         return handleRequest(headers, ui, Request.RequestType.GET, createResourceDefinition(null, m_clusterName));
     }

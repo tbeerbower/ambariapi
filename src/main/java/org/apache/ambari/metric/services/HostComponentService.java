@@ -45,8 +45,9 @@ public class HostComponentService extends BaseService {
      *
      * @return host_component resource representation
      */
-    @GET @Path("{hostComponentName}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("{hostComponentName}")
+    @Produces("text/plain")
     public Response getHostComponent(@Context HttpHeaders headers, @Context UriInfo ui,
                                      @PathParam("hostComponentName") String hostComponentName) {
 
@@ -63,7 +64,8 @@ public class HostComponentService extends BaseService {
      *
      * @return host_component collection resource representation
      */
-    @GET @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Produces("text/plain")
     public Response getHostComponents(@Context HttpHeaders headers, @Context UriInfo ui) {
         return handleRequest(headers, ui, Request.RequestType.GET,
                 createResourceDefinition(null, m_clusterName, m_hostName));

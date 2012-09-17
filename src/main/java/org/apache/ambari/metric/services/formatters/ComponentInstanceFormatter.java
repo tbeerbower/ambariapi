@@ -17,7 +17,7 @@ import java.util.*;
  * Time: 2:56 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ComponentInstanceFormatter implements ResultFormatter {
+public class ComponentInstanceFormatter extends BaseFormatter {
     public String href;
 
     //todo: don't include properties group.  Annotation doesn't seem to work.
@@ -56,7 +56,7 @@ public class ComponentInstanceFormatter implements ResultFormatter {
             }
         }
 
-        return this;
+        return serialize(this);
     }
 
     public static class HrefEntry {
