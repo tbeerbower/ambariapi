@@ -6,7 +6,7 @@
     "Service":
     {
         "Cluster": {"name" : "cluster_name",   "category" : "ServiceInfo", "temporal" : false },
-        "Service": {"name" : "service_name",   "category" : "ServiceInfo", "temporal" : false }
+        "Service": {"name" : "service_name",   "category" : "Services", "temporal" : false }
     },
     "Host":
     {
