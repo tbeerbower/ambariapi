@@ -34,16 +34,17 @@ public class ClusterControllerImplTest {
 
         Request request = new RequestImpl(propertyIds);
 
-        EqualsPredicate equalsPredicate1 = new EqualsPredicate(new PropertyIdImpl("cluster_name", "HostRoles", false), "tbmetrictest");
+//        EqualsPredicate equalsPredicate1 = new EqualsPredicate(new PropertyIdImpl("cluster_name", "HostRoles", false), "tbmetrictest");
+        EqualsPredicate equalsPredicate1 = new EqualsPredicate(new PropertyIdImpl("component_name", "HostRoles", false), "NAMENODE");
         EqualsPredicate equalsPredicate2 = new EqualsPredicate(new PropertyIdImpl("component_name", "HostRoles", false), "DATANODE");
-        EqualsPredicate equalsPredicate3 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "ip-10-110-19-142.ec2.internal");
-        EqualsPredicate equalsPredicate4 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "domu-12-31-39-16-c1-48.compute-1.internal");
-        OrPredicate orPredicate = new OrPredicate(equalsPredicate3, equalsPredicate4);
+//        EqualsPredicate equalsPredicate3 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "ip-10-110-19-142.ec2.internal");
+//        EqualsPredicate equalsPredicate4 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "domu-12-31-39-16-c1-48.compute-1.internal");
+        OrPredicate orPredicate = new OrPredicate(equalsPredicate1, equalsPredicate2);
 
-        Predicate andPredicate = new AndPredicate(equalsPredicate1, equalsPredicate2, orPredicate);
+//        Predicate andPredicate = new AndPredicate(equalsPredicate1, equalsPredicate2, orPredicate);
 
         // request the host_component resources
-        getResources(Resource.Type.HostComponent, cc, request, andPredicate);
+        getResources(Resource.Type.HostComponent, cc, request, orPredicate);
 
         // request the hosts; predicate is null so we'll get them all
         getResources(Resource.Type.Host, cc, request, null);
