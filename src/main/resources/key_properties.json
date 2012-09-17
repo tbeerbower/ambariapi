@@ -16,8 +16,8 @@
     "Component":
     {
         "Cluster":   {"name" : "cluster_name",   "category" : "ServiceComponentInfo", "temporal" : false },
-        "Service":   {"name" : "service_name",   "category" : "ServiceComponentInfo", "temporal" : false },
-        "Component": {"name" : "component_name", "category" : "ServiceComponentInfo", "temporal" : false }
+        "Service":   {"name" : "service_name",   "category" : "ServiceComponents", "temporal" : false },
+        "Component": {"name" : "component_name", "category" : "ServiceComponents", "temporal" : false }
     },
     "HostComponent":
     {
