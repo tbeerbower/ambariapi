@@ -142,16 +142,7 @@ public class JDBCResourceProvider extends AbstractResourceProvider {
             columns.append(propertyId.getCategory()).append(".").append(propertyId.getName());
             tableSet.add(propertyId.getCategory());
         }
-        StringBuilder tables = new StringBuilder();
 
-        for (String table : tableSet) {
-            if (tables.length() > 0) {
-                tables.append(", ");
-            }
-            tables.append(table);
-        }
-
-        String sql = "select " + columns + " from " + tables;
 
         boolean haveWhereClause = false;
         StringBuilder whereClause = new StringBuilder();
@@ -172,12 +163,28 @@ public class JDBCResourceProvider extends AbstractResourceProvider {
                 if (haveWhereClause || joinClause.length() > 0) {
                     joinClause.append(" and ");
                 }
-                joinClause.append(f_key[0].getCategory()).append(".").append(f_key[0].getName());
+                String category1 = f_key[0].getCategory();
+                joinClause.append(category1).append(".").append(f_key[0].getName());
                 joinClause.append("=");
-                joinClause.append(f_key[1].getCategory()).append(".").append(f_key[1].getName());
+                String category2 = f_key[1].getCategory();
+                joinClause.append(category2).append(".").append(f_key[1].getName());
+                tableSet.add(category1);
+                tableSet.add(category2);
             }
             haveWhereClause = true;
         }
+
+        StringBuilder tables = new StringBuilder();
+
+        for (String table : tableSet) {
+            if (tables.length() > 0) {
+                tables.append(", ");
+            }
+            tables.append(table);
+        }
+
+        String sql = "select " + columns + " from " + tables;
+
         if (haveWhereClause) {
             sql = sql + " where " +
                     (whereClause == null ? "" : whereClause) +
