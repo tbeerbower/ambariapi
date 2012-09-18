@@ -28,15 +28,6 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public Set<PropertyId> getPropertyIds() {
-        Set<PropertyId> propertyIds = new HashSet<PropertyId>(resourceProvider.getPropertyIds());
-        for (PropertyProvider propertyProvider : resourceProvider.getPropertyProviders()) {
-            propertyIds.addAll(propertyProvider.getPropertyIds());
-        }
-        return propertyIds;
-    }
-
-    @Override
     public Map<String, Set<String>> getCategories() {
         Map<String, Set<String>> categories = new HashMap<String, Set<String>>();
 
@@ -50,5 +41,13 @@ public class SchemaImpl implements Schema {
             properties.add(propertyId.getName());
         }
         return categories;
+    }
+
+    public Set<PropertyId> getPropertyIds() {
+        Set<PropertyId> propertyIds = new HashSet<PropertyId>(resourceProvider.getPropertyIds());
+        for (PropertyProvider propertyProvider : resourceProvider.getPropertyProviders()) {
+            propertyIds.addAll(propertyProvider.getPropertyIds());
+        }
+        return propertyIds;
     }
 }
