@@ -8,6 +8,7 @@ import org.apache.ambari.metric.spi.Predicate;
 import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.Request;
 import org.apache.ambari.metric.spi.Resource;
+import org.apache.ambari.metric.utilities.PredicateBuilder;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -24,7 +25,6 @@ public class ClusterControllerImplTest {
         // create a cluster controller
         ClusterController cc = ClusterControllerImpl.getSingleton();
 
-
         // populate the request object with the categories that we want to get
         Set<PropertyId> propertyIds = new HashSet<PropertyId>();
 //        propertyIds.add(new PropertyIdImpl("cluster_name"  , "HostRoles", false));
@@ -34,17 +34,16 @@ public class ClusterControllerImplTest {
 
         Request request = new RequestImpl(propertyIds);
 
-//        EqualsPredicate equalsPredicate1 = new EqualsPredicate(new PropertyIdImpl("cluster_name", "HostRoles", false), "tbmetrictest");
-        EqualsPredicate equalsPredicate1 = new EqualsPredicate(new PropertyIdImpl("component_name", "HostRoles", false), "NAMENODE");
-        EqualsPredicate equalsPredicate2 = new EqualsPredicate(new PropertyIdImpl("component_name", "HostRoles", false), "DATANODE");
-//        EqualsPredicate equalsPredicate3 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "ip-10-110-19-142.ec2.internal");
-//        EqualsPredicate equalsPredicate4 = new EqualsPredicate(new PropertyIdImpl("host_name", "HostRoles", false), "domu-12-31-39-16-c1-48.compute-1.internal");
-        OrPredicate orPredicate = new OrPredicate(equalsPredicate1, equalsPredicate2);
+//        EqualsPredicate equalsPredicate1 = new EqualsPredicate(new PropertyIdImpl("component_name", "HostRoles", false), "NAMENODE");
+//        EqualsPredicate equalsPredicate2 = new EqualsPredicate(new PropertyIdImpl("component_name", "HostRoles", false), "DATANODE");
+//        OrPredicate orPredicate = new OrPredicate(equalsPredicate1, equalsPredicate2);
 
-//        Predicate andPredicate = new AndPredicate(equalsPredicate1, equalsPredicate2, orPredicate);
+        PredicateBuilder pb = new PredicateBuilder();
+        Predicate predicate = pb.property("component_name", "HostRoles").equals("NAMENODE").or().
+                property("component_name", "HostRoles").equals("DATANODE").toPredicate();
 
         // request the host_component resources
-        getResources(Resource.Type.HostComponent, cc, request, orPredicate);
+        getResources(Resource.Type.HostComponent, cc, request, predicate);
 
         // request the hosts; predicate is null so we'll get them all
         getResources(Resource.Type.Host, cc, request, null);

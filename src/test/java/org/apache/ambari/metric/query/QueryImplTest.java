@@ -7,6 +7,7 @@ import org.apache.ambari.metric.predicate.EqualsPredicate;
 import org.apache.ambari.metric.resource.ResourceDefinition;
 import org.apache.ambari.metric.services.Result;
 import org.apache.ambari.metric.spi.*;
+import org.apache.ambari.metric.utilities.PredicateBuilder;
 import org.junit.Test;
 import java.util.*;
 
@@ -64,16 +65,12 @@ public class QueryImplTest {
         expect(componentResourceDef.getRelatedResources()).andReturn(setForeign);
         expect(hostComponentResourceDef.getQuery()).andReturn(hostComponentQuery);
 
-        EqualsPredicate clusterEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("clusterId", "", false), "clusterName");
-        EqualsPredicate serviceEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("serviceId", "", false), "serviceName");
-        EqualsPredicate componentEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("componentId", "", false), "componentName");
-        BasePredicate[] predicates = new BasePredicate[3];
-        predicates[0] = clusterEqualsPredicate;
-        predicates[1] = serviceEqualsPredicate;
-        predicates[2] = componentEqualsPredicate;
-        AndPredicate andPredicate = new AndPredicate(predicates);
+        PredicateBuilder pb = new PredicateBuilder();
+        Predicate predicate = pb.property("clusterId", "").equals("clusterName").and().
+                property("serviceId", "").equals("serviceName").and().
+                property("componentId", "").equals("componentName").toPredicate();
 
-        expect(controller.getResources(eq(Resource.Type.Component), eq(request), eq(andPredicate))).
+        expect(controller.getResources(eq(Resource.Type.Component), eq(request), eq(predicate))).
                 andReturn(listResources);
 
         result.addResources("/", listResources);
@@ -122,14 +119,11 @@ public class QueryImplTest {
 
         expect(componentResourceDef.getId()).andReturn(null).atLeastOnce();
 
-        EqualsPredicate clusterEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("clusterId", "", false), "clusterName");
-        EqualsPredicate serviceEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("serviceId", "", false), "serviceName");
-        BasePredicate[] predicates = new BasePredicate[2];
-        predicates[0] = clusterEqualsPredicate;
-        predicates[1] = serviceEqualsPredicate;
-        Predicate andPredicate = new AndPredicate(predicates);
+        PredicateBuilder pb = new PredicateBuilder();
+        Predicate predicate = pb.property("clusterId", "").equals("clusterName").and().
+                property("serviceId", "").equals("serviceName").toPredicate();
 
-        expect(controller.getResources(eq(Resource.Type.Component), eq(request), eq(andPredicate))).
+        expect(controller.getResources(eq(Resource.Type.Component), eq(request), eq(predicate))).
                 andReturn(listResources);
 
         result.addResources("/", listResources);
