@@ -45,11 +45,13 @@ public class DBHelper {
                 while (rs.next()) {
                     String attributes = rs.getString(1);
 
-                    try {
-                        Map<String, String> attributeMap = mapper.readValue(attributes, new TypeReference<Map<String, String>>() { });
-                        hosts.put(attributeMap.get("privateFQDN"), attributeMap.get("publicFQDN"));
-                    } catch (IOException e) {
-                        throw new IllegalStateException("Can't read hosts " + attributes, e);
+                    if (!attributes.startsWith("[]")) {
+                        try {
+                            Map<String, String> attributeMap = mapper.readValue(attributes, new TypeReference<Map<String, String>>() { });
+                            hosts.put(attributeMap.get("privateFQDN"), attributeMap.get("publicFQDN"));
+                        } catch (IOException e) {
+                            throw new IllegalStateException("Can't read hosts " + attributes, e);
+                        }
                     }
                 }
 
