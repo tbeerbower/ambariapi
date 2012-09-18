@@ -15,6 +15,14 @@ public interface Resource {
 
     public void setProperty(PropertyId id, String value);
 
+    public void setProperty(PropertyId id, Integer value);
+
+    public void setProperty(PropertyId id, Float value);
+
+    public void setProperty(PropertyId id, Double value);
+
+    public void setProperty(PropertyId id, Long value);
+
     public String getPropertyValue(PropertyId id);
 
     public enum Type {

@@ -41,6 +41,22 @@ public class ResourceImpl implements Resource {
         properties.put(id.getName(), value);
     }
 
+    public void setProperty(PropertyId id, Integer value) {
+        setProperty(id, value.toString());
+    }
+
+    public void setProperty(PropertyId id, Float value) {
+        setProperty(id, value.toString());
+    }
+
+    public void setProperty(PropertyId id, Double value) {
+        setProperty(id, value.toString());
+    }
+
+    public void setProperty(PropertyId id, Long value) {
+        setProperty(id, value.toString());
+    }
+
     @Override
     public String getPropertyValue(PropertyId id) {
 

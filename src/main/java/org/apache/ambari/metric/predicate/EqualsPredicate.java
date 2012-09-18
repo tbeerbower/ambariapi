@@ -15,7 +15,7 @@ public class EqualsPredicate extends ComparisonPredicate {
 
     @Override
     public boolean evaluate(Resource resource) {
-        return getValue().equals(resource.getPropertyValue(getPropertyId()));
+        return getValue().compareTo(resource.getPropertyValue(getPropertyId()))== 0;
     }
 
     @Override
