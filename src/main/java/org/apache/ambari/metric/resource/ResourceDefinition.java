@@ -19,7 +19,7 @@ public interface ResourceDefinition {
     public String getSingularName();
     public String getId();
     public Set<ResourceDefinition> getChildren();
-    public Set<ResourceDefinition> getRelatedResources();
+    public Set<ResourceDefinition> getRelations();
     public Map<Resource.Type, String> getResourceIds();
     public ResultFormatter getResultFormatter();
 

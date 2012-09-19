@@ -29,7 +29,6 @@ public class RequestImpl implements Request {
         m_headers = headers;
         m_requestType = requestType;
         m_resourceDefinition = resourceDefinition;
-        setupResource(resourceDefinition);
     }
 
     @Override
@@ -40,11 +39,6 @@ public class RequestImpl implements Request {
     @Override
     public URI getURI() {
         return m_uriInfo.getRequestUri();
-    }
-
-    @Override
-    public ResponseType getResponseType() {
-        return ResponseType.JSON;
     }
 
     @Override
@@ -88,17 +82,8 @@ public class RequestImpl implements Request {
         return null;
     }
 
-    private void setupResource(ResourceDefinition resource) {
-        String path = getURI().getPath();
-        String[] tokens = path.split("/");
-
-        int startIndex = resource.getId() == null ? tokens.length - 2 : tokens.length - 3;
-
-        for (int i = startIndex; i >= 2; i-=2) {
-
-        }
-
+    @Override
+    public Serializer getSerializer() {
+        return new JSONSerializer();
     }
-
-
 }

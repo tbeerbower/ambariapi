@@ -74,7 +74,7 @@ public class QueryImpl implements Query {
             for (ResourceDefinition resource : m_resourceDefinition.getChildren()) {
                 m_mapSubQueries.put(resource, resource.getQuery());
             }
-            for (ResourceDefinition resource : m_resourceDefinition.getRelatedResources()) {
+            for (ResourceDefinition resource : m_resourceDefinition.getRelations()) {
                 m_mapSubQueries.put(resource, resource.getQuery());
             }
         }

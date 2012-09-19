@@ -61,7 +61,7 @@ public class QueryImplTest {
 
         expect(componentResourceDef.getId()).andReturn("componentName").atLeastOnce();
         expect(componentResourceDef.getChildren()).andReturn(setChildren);
-        expect(componentResourceDef.getRelatedResources()).andReturn(setForeign);
+        expect(componentResourceDef.getRelations()).andReturn(setForeign);
         expect(hostComponentResourceDef.getQuery()).andReturn(hostComponentQuery);
 
         EqualsPredicate clusterEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("clusterId", "", false), "clusterName");
@@ -191,7 +191,7 @@ public class QueryImplTest {
         expect(clusterResourceDef.getChildren()).andReturn(setChildren);
         expect(serviceResourceDef.getQuery()).andReturn(serviceQuery);
         expect(hostResourceDef.getQuery()).andReturn(hostQuery);
-        expect(clusterResourceDef.getRelatedResources()).andReturn(setForeign);
+        expect(clusterResourceDef.getRelations()).andReturn(setForeign);
 
         Predicate clusterEqualsPredicate = new EqualsPredicate(new PropertyIdImpl("clusterId", "", false), "clusterName");
 

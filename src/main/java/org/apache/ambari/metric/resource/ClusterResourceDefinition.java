@@ -58,7 +58,7 @@ public class ClusterResourceDefinition extends BaseResourceDefinition {
     }
 
     @Override
-    public Set<ResourceDefinition> getRelatedResources() {
+    public Set<ResourceDefinition> getRelations() {
         return Collections.emptySet();
     }
 
