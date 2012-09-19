@@ -28,7 +28,7 @@ public class StartServer {
         System.out.println("Starting Ambari API server using the following properties: " + mapArgs);
         System.setProperty("ambariapi.dbfile", mapArgs.get("db"));
 
-        ResourceConfig config = new PackagesResourceConfig("org.apache.ambari.metric.services");
+        ResourceConfig config = new PackagesResourceConfig("org.apache.ambari.api.services");
         System.out.println("Starting server: http://localhost:" + mapArgs.get("port") + '/');
         HttpServer server = HttpServerFactory.create("http://localhost:" + mapArgs.get("port") + '/', config);
         server.start();
