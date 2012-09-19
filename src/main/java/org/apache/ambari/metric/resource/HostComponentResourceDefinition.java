@@ -46,7 +46,7 @@ public class HostComponentResourceDefinition extends BaseResourceDefinition {
     }
 
     @Override
-    public Set<ResourceDefinition> getRelatedResources() {
+    public Set<ResourceDefinition> getRelations() {
         Set<ResourceDefinition> setRelated = new HashSet<ResourceDefinition>();
         // already have all information necessary for host
         //todo: adding host here causes a cycle

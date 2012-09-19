@@ -27,7 +27,6 @@ public interface Request {
 
     public ResourceDefinition getResource();
     public URI getURI();
-    public ResponseType getResponseType();
     public RequestType getRequestType();
     public int getAPIVersion();
     public Map<String, List<String>> getQueryParameters();
@@ -36,6 +35,7 @@ public interface Request {
     public Set<String> getExpandEntities();
     public Map<String, List<String>> getHeaders();
     public String getBody();
+    public Serializer getSerializer();
 
     //todo: temporal information.  For now always specify in PR for each field.  Could use *[...] ?
     //public Map<String, TemporalData> getTemporalFields();

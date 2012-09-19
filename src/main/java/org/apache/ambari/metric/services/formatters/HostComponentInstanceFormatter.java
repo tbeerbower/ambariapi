@@ -1,70 +1,78 @@
 package org.apache.ambari.metric.services.formatters;
 
-import org.apache.ambari.metric.internal.ClusterControllerImpl;
 import org.apache.ambari.metric.resource.ResourceDefinition;
 import org.apache.ambari.metric.services.Result;
 import org.apache.ambari.metric.spi.Resource;
 import org.apache.ambari.metric.spi.Schema;
-import org.codehaus.jackson.annotate.JsonUnwrapped;
 
 import javax.ws.rs.core.UriInfo;
-import java.util.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: john
- * Date: 9/15/12
- * Time: 7:37 PM
- * To change this template use File | Settings | File Templates.
+ * HostComponent instance formatter.
  */
 public class HostComponentInstanceFormatter extends BaseFormatter {
-    public String href;
+    /**
+     * Related host.
+     */
     public HrefEntry host;
 
-    //todo: don't include properties group.  Annotation doesn't seem to work.
-    @JsonUnwrapped
-    public Map<String, Map<String, String>> properties = new HashMap<String, Map<String, String>>();
+    /**
+     * Related component.
+     */
     public HrefEntry component;
-    private ResourceDefinition m_resourceDefinition;
 
-
+    /**
+     * Constructor.
+     *
+     * @param resourceDefinition  the resource definition
+     */
     public HostComponentInstanceFormatter(ResourceDefinition resourceDefinition) {
-        m_resourceDefinition = resourceDefinition;
+        super(resourceDefinition);
     }
 
+    /**
+     * Extends the base format to add the host.
+     *
+     * @param result   the result being formatted
+     * @param uriInfo  url info
+     *
+     * @return         the formatted hostComponent instance
+     */
     @Override
     public Object format(Result result, UriInfo uriInfo) {
-        href = uriInfo.getAbsolutePath().toString();
-        Map<String, List<Resource>> mapResults = result.getResources();
-
+        Object o = super.format(result, uriInfo);
         host = new HrefEntry(href.substring(0, href.indexOf("/host_components/")));
 
-        List<Resource> listProperties = mapResults.get("/");
-        Resource resource = listProperties.get(0);
-        properties = resource.getCategories();
-
-        ResourceDefinition resourceDef = m_resourceDefinition.getRelatedResources().iterator().next();
-        String resourceName = resourceDef.getSingularName();
-        List<Resource> listResources = mapResults.get(resourceName);
-
-        Resource r = listResources.get(0);
-        Schema schema = ClusterControllerImpl.getSingleton().getSchema(r.getType());
-        String clusterId = m_resourceDefinition.getResourceIds().get(Resource.Type.Cluster);
-        String serviceId = r.getPropertyValue(schema.getKeyPropertyId(Resource.Type.Service));
-        String componentId = m_resourceDefinition.getId();
-        String hostComponentUrl = href.substring(0, href.indexOf(clusterId) + clusterId.length() + 1) +
-                "services/" +serviceId + "/components/" + componentId;
-
-        component = new HrefEntry(hostComponentUrl);
-
-        return serialize(this);
+        return o;
     }
 
-    public static class HrefEntry {
-        public String href;
+    /**
+     * Add component.
+     *
+     * @param href  the href to add
+     * @param r     the resource being added
+     */
+    @Override
+    public void addSubResource(HrefEntry href, Resource r) {
+        component = href;
+    }
 
-        public HrefEntry(String href) {
-            this.href = href;
-        }
+    /**
+     * Build the component href.
+     *
+     * @param baseHref  base url
+     * @param schema    associated schema
+     * @param relation  the component resource
+     *
+     * @return href for the associated component resource
+     */
+    @Override
+    String buildRelationHref(String baseHref, Schema schema, Resource relation) {
+        ResourceDefinition resourceDefinition = getResourceDefinition();
+        String clusterId = resourceDefinition.getResourceIds().get(Resource.Type.Cluster);
+        String serviceId = relation.getPropertyValue(schema.getKeyPropertyId(Resource.Type.Service));
+        String componentId = resourceDefinition.getId();
+        return href.substring(0, href.indexOf(clusterId) + clusterId.length() + 1) +
+                "services/" +serviceId + "/components/" + componentId;
     }
 }

@@ -1,68 +1,46 @@
 package org.apache.ambari.metric.services.formatters;
 
-import org.apache.ambari.metric.internal.ClusterControllerImpl;
 import org.apache.ambari.metric.resource.ResourceDefinition;
-import org.apache.ambari.metric.services.Result;
 import org.apache.ambari.metric.spi.Resource;
-import org.apache.ambari.metric.spi.Schema;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
 
-import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
 import java.util.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: john
- * Date: 9/14/12
- * Time: 9:11 PM
- * To change this template use File | Settings | File Templates.
+ * Formatter for cluster instance resources.
  */
 public class ClusterInstanceFormatter extends BaseFormatter {
-    public String href;
+
+    /**
+     * services collection
+     */
     public List<HrefEntry> services = new ArrayList<HrefEntry>();
+
+    /**
+     * hosts collection
+     */
     public List<HrefEntry> hosts = new ArrayList<HrefEntry>();
 
-    private ResourceDefinition m_resourceDefinition;
-
+    /**
+     * Constructor.
+     *
+     * @param resourceDefinition  resource definition
+     */
     public ClusterInstanceFormatter(ResourceDefinition resourceDefinition) {
-        m_resourceDefinition = resourceDefinition;
+       super(resourceDefinition);
     }
 
+    /**
+     * Add services and hosts href's.
+     *
+     * @param href  the href to add
+     * @param r     the resource being added
+     */
     @Override
-    public Object format(Result result, UriInfo uriInfo) {
-        href = uriInfo.getAbsolutePath().toString();
-
-        String itemHref =  href.endsWith("/") ? href : href +'/';
-        Map<String, List<Resource>> mapResults = result.getResources();
-
-        Set<ResourceDefinition> setChildren = m_resourceDefinition.getChildren();
-        for(ResourceDefinition resource : setChildren) {
-            String resourceName = resource.getPluralName();
-            List<Resource> listResources = mapResults.get(resourceName);
-            for(Resource r : listResources) {
-                Schema schema = ClusterControllerImpl.getSingleton().getSchema(r.getType());
-                if (resourceName == "services") {
-                    services.add(new HrefEntry(itemHref + resourceName + '/' +
-                            r.getPropertyValue(schema.getKeyPropertyId(r.getType()))));
-                } else {
-                    hosts.add(new HrefEntry(itemHref + resourceName + '/' +
-                            r.getPropertyValue(schema.getKeyPropertyId(r.getType()))));
-                }
-
-            }
-        }
-        return serialize(this);
-    }
-
-    public static class HrefEntry {
-        public String href;
-
-        public HrefEntry(String href) {
-            this.href = href;
+    public void addSubResource(HrefEntry href, Resource r) {
+        if (r.getType() == Resource.Type.Service) {
+            services.add(href);
+        } else {
+            hosts.add(href);
         }
     }
-
-
 }

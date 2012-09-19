@@ -26,7 +26,8 @@ public class BaseService {
 
         Request req = getRequestFactory().createRequest(headers, uriInfo, requestType, resourceDefinition);
         Result result = getRequestHandler().handleRequest(req);
-        return getResponseFactory().createResponse(resourceDefinition.getResultFormatter().format(result, uriInfo));
+        Object formattedResult = resourceDefinition.getResultFormatter().format(result, uriInfo);
+        return getResponseFactory().createResponse(req.getSerializer().serialize(formattedResult));
     }
 
     RequestFactory getRequestFactory() {

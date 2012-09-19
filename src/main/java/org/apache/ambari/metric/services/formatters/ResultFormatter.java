@@ -6,12 +6,16 @@ import org.apache.ambari.metric.services.Result;
 import javax.ws.rs.core.UriInfo;
 
 /**
- * Created with IntelliJ IDEA.
- * User: john
- * Date: 9/14/12
- * Time: 7:29 PM
- * To change this template use File | Settings | File Templates.
+ * Format internal result to format expected by client.
  */
 public interface ResultFormatter {
+    /**
+     * Format the given result to a format expected by client.
+     *
+     * @param result   internal result
+     * @param uriInfo  URL info for request
+     *
+     * @return the formatted result
+     */
     Object format(Result result, UriInfo uriInfo);
 }

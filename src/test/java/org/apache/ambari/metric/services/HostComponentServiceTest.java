@@ -27,6 +27,8 @@ public class HostComponentServiceTest {
         ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
         ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
         Object formattedResult = new Object();
+        Serializer serializer = createStrictMock(Serializer.class);
+        Object serializedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -48,17 +50,21 @@ public class HostComponentServiceTest {
         expect(requestHandler.handleRequest(request)).andReturn(result);
         expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
         expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
+        expect(request.getSerializer()).andReturn(serializer);
+        expect(serializer.serialize(formattedResult)).andReturn(serializedResult);
 
-        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+        expect(responseFactory.createResponse(serializedResult)).andReturn(response);
 
-        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        replay(resourceDef, resultFormatter, serializer, requestFactory, responseFactory, request, requestHandler,
+                result, response, httpHeaders, uriInfo);
 
         //test
         HostComponentService hostComponentService = new TestHostComponentService(resourceDef, clusterName, hostName, hostComponentName,
                 requestFactory, responseFactory, requestHandler);
         assertSame(response, hostComponentService.getHostComponent(httpHeaders, uriInfo, hostComponentName));
 
-        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, serializer, requestFactory, responseFactory, request, requestHandler,
+                result, response, httpHeaders, uriInfo);
     }
 
     @Test
@@ -66,6 +72,8 @@ public class HostComponentServiceTest {
         ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
         ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
         Object formattedResult = new Object();
+        Serializer serializer = createStrictMock(Serializer.class);
+        Object serializedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -86,17 +94,21 @@ public class HostComponentServiceTest {
         expect(requestHandler.handleRequest(request)).andReturn(result);
         expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
         expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
+        expect(request.getSerializer()).andReturn(serializer);
+        expect(serializer.serialize(formattedResult)).andReturn(serializedResult);
 
-        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+        expect(responseFactory.createResponse(serializedResult)).andReturn(response);
 
-        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        replay(resourceDef, resultFormatter, serializer, requestFactory, responseFactory, request, requestHandler,
+                result, response, httpHeaders, uriInfo);
 
         //test
         HostComponentService componentService = new TestHostComponentService(resourceDef, clusterName, hostName, null, requestFactory,
                 responseFactory, requestHandler);
         assertSame(response, componentService.getHostComponents(httpHeaders, uriInfo));
 
-        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, serializer, requestFactory, responseFactory, request, requestHandler,
+                result, response, httpHeaders, uriInfo);
     }
 
     private class TestHostComponentService extends HostComponentService {

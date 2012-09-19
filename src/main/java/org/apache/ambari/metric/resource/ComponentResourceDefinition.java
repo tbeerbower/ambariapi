@@ -45,7 +45,7 @@ public class ComponentResourceDefinition extends BaseResourceDefinition {
     }
 
     @Override
-    public Set<ResourceDefinition> getRelatedResources() {
+    public Set<ResourceDefinition> getRelations() {
         Set<ResourceDefinition> setResourceDefinitions = new HashSet<ResourceDefinition>();
         // for host_component collection need host id property
         HostComponentResourceDefinition hostComponentResource = new HostComponentResourceDefinition(

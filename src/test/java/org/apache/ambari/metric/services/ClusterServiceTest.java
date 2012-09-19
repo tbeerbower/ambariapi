@@ -29,6 +29,8 @@ public class ClusterServiceTest {
         ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
         ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
         Object formattedResult = new Object();
+        Serializer serializer = createStrictMock(Serializer.class);
+        Object serializedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -48,16 +50,20 @@ public class ClusterServiceTest {
         expect(requestHandler.handleRequest(request)).andReturn(result);
         expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
         expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
+        expect(request.getSerializer()).andReturn(serializer);
+        expect(serializer.serialize(formattedResult)).andReturn(serializedResult);
 
-        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+        expect(responseFactory.createResponse(serializedResult)).andReturn(response);
 
-        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        replay(resourceDef, resultFormatter, serializer, requestFactory, responseFactory, request,requestHandler,
+                result, response, httpHeaders, uriInfo);
 
         //test
         ClusterService clusterService = new TestClusterService(resourceDef, clusterName, requestFactory, responseFactory, requestHandler);
         assertSame(response, clusterService.getCluster(httpHeaders, uriInfo, clusterName));
 
-        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, serializer, requestFactory, responseFactory, request, requestHandler,
+                result, response, httpHeaders, uriInfo);
     }
 
     @Test
@@ -65,6 +71,8 @@ public class ClusterServiceTest {
         ResourceDefinition resourceDef = createStrictMock(ResourceDefinition.class);
         ResultFormatter resultFormatter = createStrictMock(ResultFormatter.class);
         Object formattedResult = new Object();
+        Serializer serializer = createStrictMock(Serializer.class);
+        Object serializedResult = new Object();
         RequestFactory requestFactory = createStrictMock(RequestFactory.class);
         ResponseFactory responseFactory = createStrictMock(ResponseFactory.class);
         Request request = createNiceMock(Request.class);
@@ -82,16 +90,20 @@ public class ClusterServiceTest {
         expect(requestHandler.handleRequest(request)).andReturn(result);
         expect(resourceDef.getResultFormatter()).andReturn(resultFormatter);
         expect(resultFormatter.format(result, uriInfo)).andReturn(formattedResult);
+        expect(request.getSerializer()).andReturn(serializer);
+        expect(serializer.serialize(formattedResult)).andReturn(serializedResult);
 
-        expect(responseFactory.createResponse(formattedResult)).andReturn(response);
+        expect(responseFactory.createResponse(serializedResult)).andReturn(response);
 
-        replay(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        replay(resourceDef, resultFormatter, serializer, requestFactory, responseFactory, request,requestHandler,
+                result, response, httpHeaders, uriInfo);
 
         //test
         ClusterService clusterService = new TestClusterService(resourceDef, null, requestFactory, responseFactory, requestHandler);
         assertSame(response, clusterService.getClusters(httpHeaders, uriInfo));
 
-        verify(resourceDef, resultFormatter, requestFactory, responseFactory, request,requestHandler, result, response, httpHeaders, uriInfo);
+        verify(resourceDef, resultFormatter, serializer, requestFactory, responseFactory, request,requestHandler,
+                result, response, httpHeaders, uriInfo);
     }
 
     private class TestClusterService extends ClusterService {
