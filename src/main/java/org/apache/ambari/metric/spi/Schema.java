@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The schema is used to describe all of the properties that a provider
+ * The schema is used to describe all of the properties that a resource type
  * supports.
  */
 public interface Schema {

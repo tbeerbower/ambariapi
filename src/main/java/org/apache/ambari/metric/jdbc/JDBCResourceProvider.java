@@ -66,7 +66,7 @@ public class JDBCResourceProvider extends AbstractResourceProvider {
         this.f_keys = F_KEYS.get(type);
         schema = new SchemaImpl(this, Properties.getKeyPropertyIds(type));
 
-        addPropertyProvider(JMXPropertyProvider.create(type, DBHelper.getHosts()));
+//        addPropertyProvider(JMXPropertyProvider.create(type, DBHelper.getHosts()));
     }
 
     @Override

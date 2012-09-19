@@ -10,7 +10,8 @@ import java.util.Set;
 public interface Request {
 
     /**
-     * The set of property ids being requested.
+     * The set of property ids being requested.  An empty set signifies
+     * that all supported properties should be returned (i.e. select * ).
      *
      * @return the set of property ids being requested
      */

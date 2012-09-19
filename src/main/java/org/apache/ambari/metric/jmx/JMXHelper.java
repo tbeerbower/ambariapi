@@ -22,7 +22,7 @@ public class JMXHelper {
                     JMXMetrics.class);
 
         } catch (IOException e) {
-            System.out.println("GangliaHelper.getJMXMetrics : caught " + e);
+            System.out.println("getJMXMetrics : caught " + e);
             throw new IllegalStateException("Can't get metric " + ".", e);
         }
     }

@@ -9,6 +9,7 @@ import org.apache.ambari.metric.spi.PropertyId;
 import org.apache.ambari.metric.spi.Request;
 import org.apache.ambari.metric.spi.Resource;
 import org.apache.ambari.metric.utilities.PredicateBuilder;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -19,7 +20,7 @@ import java.util.Set;
  */
 public class ClusterControllerImplTest {
 
-    @Test
+    @Ignore @Test
     public void testGetResources() throws Exception {
 
         // create a cluster controller
@@ -38,9 +39,10 @@ public class ClusterControllerImplTest {
 //        EqualsPredicate equalsPredicate2 = new EqualsPredicate(new PropertyIdImpl("component_name", "HostRoles", false), "DATANODE");
 //        OrPredicate orPredicate = new OrPredicate(equalsPredicate1, equalsPredicate2);
 
-        PredicateBuilder pb = new PredicateBuilder();
-        Predicate predicate = pb.property("component_name", "HostRoles").equals("NAMENODE").or().
-                property("component_name", "HostRoles").equals("DATANODE").toPredicate();
+        Predicate predicate = new PredicateBuilder().
+                property("component_name", "HostRoles").equals("NAMENODE").or().
+                property("component_name", "HostRoles").equals("DATANODE").
+                toPredicate();
 
         // request the host_component resources
         getResources(Resource.Type.HostComponent, cc, request, predicate);
