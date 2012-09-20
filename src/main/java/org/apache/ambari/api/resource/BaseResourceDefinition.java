@@ -35,11 +35,11 @@
 package org.apache.ambari.api.resource;
 
 
-import org.apache.ambari.controller.internal.ClusterControllerImpl;
+import org.apache.ambari.api.controller.internal.ClusterControllerImpl;
 import org.apache.ambari.api.query.Query;
 import org.apache.ambari.api.query.QueryImpl;
-import org.apache.ambari.controller.spi.ClusterController;
-import org.apache.ambari.controller.spi.Resource;
+import org.apache.ambari.api.controller.spi.ClusterController;
+import org.apache.ambari.api.controller.spi.Resource;
 
 import java.util.HashMap;
 import java.util.Map;

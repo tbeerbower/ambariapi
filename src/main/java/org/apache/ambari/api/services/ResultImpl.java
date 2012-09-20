@@ -35,7 +35,7 @@
 package org.apache.ambari.api.services;
 
 
-import org.apache.ambari.controller.spi.Resource;
+import org.apache.ambari.api.controller.spi.Resource;
 
 import java.util.HashMap;
 import java.util.List;

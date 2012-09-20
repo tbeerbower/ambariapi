@@ -36,7 +36,7 @@ package org.apache.ambari.api.resource;
 
 import org.apache.ambari.api.query.Query;
 import org.apache.ambari.api.services.formatters.ResultFormatter;
-import org.apache.ambari.controller.spi.Resource;
+import org.apache.ambari.api.controller.spi.Resource;
 
 import java.util.Map;
 import java.util.Set;

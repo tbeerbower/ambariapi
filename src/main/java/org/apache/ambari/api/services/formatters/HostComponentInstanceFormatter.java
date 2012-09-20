@@ -36,8 +36,8 @@ package org.apache.ambari.api.services.formatters;
 
 import org.apache.ambari.api.resource.ResourceDefinition;
 import org.apache.ambari.api.services.Result;
-import org.apache.ambari.controller.spi.Resource;
-import org.apache.ambari.controller.spi.Schema;
+import org.apache.ambari.api.controller.spi.Resource;
+import org.apache.ambari.api.controller.spi.Schema;
 
 import javax.ws.rs.core.UriInfo;
 

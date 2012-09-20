@@ -17,16 +17,16 @@
  */
 package org.apache.ambari.api.query;
 
-import org.apache.ambari.controller.internal.PropertyIdImpl;
-import org.apache.ambari.controller.predicate.EqualsPredicate;
+import org.apache.ambari.api.controller.internal.PropertyIdImpl;
+import org.apache.ambari.api.controller.predicate.EqualsPredicate;
 import org.apache.ambari.api.resource.ResourceDefinition;
 import org.apache.ambari.api.services.Result;
-import org.apache.ambari.controller.spi.ClusterController;
-import org.apache.ambari.controller.spi.Predicate;
-import org.apache.ambari.controller.spi.Request;
-import org.apache.ambari.controller.spi.Resource;
-import org.apache.ambari.controller.spi.Schema;
-import org.apache.ambari.controller.utilities.PredicateBuilder;
+import org.apache.ambari.api.controller.spi.ClusterController;
+import org.apache.ambari.api.controller.spi.Predicate;
+import org.apache.ambari.api.controller.spi.Request;
+import org.apache.ambari.api.controller.spi.Resource;
+import org.apache.ambari.api.controller.spi.Schema;
+import org.apache.ambari.api.controller.utilities.PredicateBuilder;
 import org.junit.Test;
 
 import java.util.*;
