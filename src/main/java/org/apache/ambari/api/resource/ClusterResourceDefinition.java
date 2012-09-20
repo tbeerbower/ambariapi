@@ -49,52 +49,52 @@ import java.util.Set;
  */
 public class ClusterResourceDefinition extends BaseResourceDefinition {
 
-    public ClusterResourceDefinition(String id) {
-        super(Resource.Type.Cluster, id);
+  public ClusterResourceDefinition(String id) {
+    super(Resource.Type.Cluster, id);
 
-        if (id == null) {
-            getQuery().addProperty(getClusterController().getSchema(
-                    Resource.Type.Cluster).getKeyPropertyId(Resource.Type.Cluster));
-        }
+    if (id == null) {
+      getQuery().addProperty(getClusterController().getSchema(
+          Resource.Type.Cluster).getKeyPropertyId(Resource.Type.Cluster));
     }
+  }
 
-    @Override
-    public String getPluralName() {
-        return "clusters";
-    }
+  @Override
+  public String getPluralName() {
+    return "clusters";
+  }
 
-    @Override
-    public String getSingularName() {
-        return "cluster";
-    }
+  @Override
+  public String getSingularName() {
+    return "cluster";
+  }
 
-    @Override
-    public Set<ResourceDefinition> getChildren() {
-        Set<ResourceDefinition> setChildren = new HashSet<ResourceDefinition>();
+  @Override
+  public Set<ResourceDefinition> getChildren() {
+    Set<ResourceDefinition> setChildren = new HashSet<ResourceDefinition>();
 
-        ServiceResourceDefinition serviceResource = new ServiceResourceDefinition(null, getId());
-        PropertyId serviceIdProperty = getClusterController().getSchema(
-                Resource.Type.Service).getKeyPropertyId(Resource.Type.Service);
-        serviceResource.getQuery().addProperty(serviceIdProperty);
-        setChildren.add(serviceResource);
+    ServiceResourceDefinition serviceResource = new ServiceResourceDefinition(null, getId());
+    PropertyId serviceIdProperty = getClusterController().getSchema(
+        Resource.Type.Service).getKeyPropertyId(Resource.Type.Service);
+    serviceResource.getQuery().addProperty(serviceIdProperty);
+    setChildren.add(serviceResource);
 
-        HostResourceDefinition hostResource = new HostResourceDefinition(null, getId());
-        PropertyId hostIdProperty = getClusterController().getSchema(
-                Resource.Type.Host).getKeyPropertyId(Resource.Type.Host);
-        hostResource.getQuery().addProperty(hostIdProperty);
-        setChildren.add(hostResource);
+    HostResourceDefinition hostResource = new HostResourceDefinition(null, getId());
+    PropertyId hostIdProperty = getClusterController().getSchema(
+        Resource.Type.Host).getKeyPropertyId(Resource.Type.Host);
+    hostResource.getQuery().addProperty(hostIdProperty);
+    setChildren.add(hostResource);
 
-        return setChildren;
-    }
+    return setChildren;
+  }
 
-    @Override
-    public Set<ResourceDefinition> getRelations() {
-        return Collections.emptySet();
-    }
+  @Override
+  public Set<ResourceDefinition> getRelations() {
+    return Collections.emptySet();
+  }
 
-    @Override
-    public ResultFormatter getResultFormatter() {
-        //todo: instance formatter
-        return getId() == null ? new CollectionFormatter(this) : new ClusterInstanceFormatter(this);
-    }
+  @Override
+  public ResultFormatter getResultFormatter() {
+    //todo: instance formatter
+    return getId() == null ? new CollectionFormatter(this) : new ClusterInstanceFormatter(this);
+  }
 }

@@ -32,25 +32,25 @@ import static org.junit.Assert.assertSame;
  */
 public class ReadRequestHandlerTest {
 
-    @Test
-    public void testHandlerRequest() {
-        Request request = createStrictMock(Request.class);
-        ResourceDefinition resourceDefinition = createStrictMock(ResourceDefinition.class);
-        Query query = createStrictMock(Query.class);
-        Result result = createStrictMock(Result.class);
+  @Test
+  public void testHandlerRequest() {
+    Request request = createStrictMock(Request.class);
+    ResourceDefinition resourceDefinition = createStrictMock(ResourceDefinition.class);
+    Query query = createStrictMock(Query.class);
+    Result result = createStrictMock(Result.class);
 
-        //expectations
-        expect(request.getResource()).andReturn(resourceDefinition);
-        expect(resourceDefinition.getQuery()).andReturn(query);
-        expect(query.execute()).andReturn(result);
+    //expectations
+    expect(request.getResource()).andReturn(resourceDefinition);
+    expect(resourceDefinition.getQuery()).andReturn(query);
+    expect(query.execute()).andReturn(result);
 
-        replay(request, resourceDefinition, query, result);
+    replay(request, resourceDefinition, query, result);
 
-        //test
-        ReadRequestHandler handler = new ReadRequestHandler();
-        assertSame(result, handler.handleRequest(request));
+    //test
+    ReadRequestHandler handler = new ReadRequestHandler();
+    assertSame(result, handler.handleRequest(request));
 
-        verify(request, resourceDefinition, query, result);
+    verify(request, resourceDefinition, query, result);
 
-    }
+  }
 }

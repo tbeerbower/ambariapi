@@ -22,9 +22,9 @@ package org.apache.ambari.controller.predicate;
  */
 public interface PredicateVisitor {
 
-    public void acceptComparisonPredicate(ComparisonPredicate predicate);
+  public void acceptComparisonPredicate(ComparisonPredicate predicate);
 
-    public void acceptArrayPredicate(ArrayPredicate predicate);
+  public void acceptArrayPredicate(ArrayPredicate predicate);
 
-    public void acceptUnaryPredicate(UnaryPredicate predicate);
+  public void acceptUnaryPredicate(UnaryPredicate predicate);
 }

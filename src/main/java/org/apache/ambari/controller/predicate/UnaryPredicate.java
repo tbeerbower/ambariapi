@@ -25,25 +25,25 @@ import java.util.Set;
  * Predicate that operates on one other predicate.
  */
 public abstract class UnaryPredicate implements BasePredicate {
-    private final BasePredicate predicate;
+  private final BasePredicate predicate;
 
-    public UnaryPredicate(BasePredicate predicate) {
-        this.predicate = predicate;
-    }
+  public UnaryPredicate(BasePredicate predicate) {
+    this.predicate = predicate;
+  }
 
-    public BasePredicate getPredicate() {
-        return predicate;
-    }
+  public BasePredicate getPredicate() {
+    return predicate;
+  }
 
-    @Override
-    public Set<PropertyId> getPropertyIds() {
-        return predicate.getPropertyIds();
-    }
+  @Override
+  public Set<PropertyId> getPropertyIds() {
+    return predicate.getPropertyIds();
+  }
 
-    @Override
-    public void accept(PredicateVisitor visitor) {
-        visitor.acceptUnaryPredicate(this);
-    }
+  @Override
+  public void accept(PredicateVisitor visitor) {
+    visitor.acceptUnaryPredicate(this);
+  }
 
-    public abstract String getOperator();
+  public abstract String getOperator();
 }

@@ -40,13 +40,13 @@ import org.apache.ambari.api.services.Request;
  *
  */
 public class RequestHandlerFactory {
-    public RequestHandler getRequestHandler(Request.RequestType requestType) {
-        switch (requestType) {
-            case GET:
-                return new ReadRequestHandler();
-            default:
-                //todo:
-                throw new UnsupportedOperationException("Only GET requests are supported at this time");
-        }
+  public RequestHandler getRequestHandler(Request.RequestType requestType) {
+    switch (requestType) {
+      case GET:
+        return new ReadRequestHandler();
+      default:
+        //todo:
+        throw new UnsupportedOperationException("Only GET requests are supported at this time");
     }
+  }
 }

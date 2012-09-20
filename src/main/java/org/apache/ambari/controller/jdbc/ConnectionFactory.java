@@ -41,5 +41,5 @@ import java.sql.SQLException;
  *
  */
 public interface ConnectionFactory {
-    public Connection getConnection() throws SQLException;
+  public Connection getConnection() throws SQLException;
 }

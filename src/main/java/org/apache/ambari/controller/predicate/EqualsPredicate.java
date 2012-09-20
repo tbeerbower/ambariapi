@@ -26,17 +26,17 @@ import org.apache.ambari.controller.spi.Resource;
 public class EqualsPredicate extends ComparisonPredicate {
 
 
-    public EqualsPredicate(PropertyId propertyId, Comparable<String> value) {
-        super(propertyId, value);
-    }
+  public EqualsPredicate(PropertyId propertyId, Comparable<String> value) {
+    super(propertyId, value);
+  }
 
-    @Override
-    public boolean evaluate(Resource resource) {
-        return getValue().compareTo(resource.getPropertyValue(getPropertyId()))== 0;
-    }
+  @Override
+  public boolean evaluate(Resource resource) {
+    return getValue().compareTo(resource.getPropertyValue(getPropertyId())) == 0;
+  }
 
-    @Override
-    public String getOperator() {
-        return "=";
-    }
+  @Override
+  public String getOperator() {
+    return "=";
+  }
 }

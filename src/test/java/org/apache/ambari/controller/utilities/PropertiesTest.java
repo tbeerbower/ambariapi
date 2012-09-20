@@ -29,38 +29,37 @@ import java.util.Set;
  */
 public class PropertiesTest {
 
-    @Test
-    public void testGetPropertyIds() throws Exception {
+  @Test
+  public void testGetPropertyIds() throws Exception {
 
 
-        Set<PropertyId> propertyIds = Properties.getPropertyIds(Resource.Type.HostComponent, "DB");
+    Set<PropertyId> propertyIds = Properties.getPropertyIds(Resource.Type.HostComponent, "DB");
 
-        for (PropertyId propertyId : propertyIds) {
+    for (PropertyId propertyId : propertyIds) {
 //            System.out.println(propertyId);
-        }
-
-        propertyIds = Properties.getPropertyIds(Resource.Type.HostComponent, "JMX");
-
-        for (PropertyId propertyId : propertyIds) {
-//            System.out.println(propertyId);
-        }
-
-        propertyIds = Properties.getPropertyIds(Resource.Type.HostComponent, "GANGLIA");
-
-        for (PropertyId propertyId : propertyIds) {
-//            System.out.println(propertyId);
-        }
     }
 
+    propertyIds = Properties.getPropertyIds(Resource.Type.HostComponent, "JMX");
 
-    @Test
-    public void testGetKeyPropertyIds() throws Exception {
-
-        Map<String, PropertyId> keyProperties =  Properties.getKeyPropertyIds(Resource.Type.Service);
-
-        System.out.println(keyProperties);
+    for (PropertyId propertyId : propertyIds) {
+//            System.out.println(propertyId);
     }
 
+    propertyIds = Properties.getPropertyIds(Resource.Type.HostComponent, "GANGLIA");
+
+    for (PropertyId propertyId : propertyIds) {
+//            System.out.println(propertyId);
+    }
+  }
+
+
+  @Test
+  public void testGetKeyPropertyIds() throws Exception {
+
+    Map<String, PropertyId> keyProperties = Properties.getKeyPropertyIds(Resource.Type.Service);
+
+    System.out.println(keyProperties);
+  }
 
 
 }

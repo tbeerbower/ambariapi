@@ -24,17 +24,17 @@ import org.apache.ambari.controller.spi.Resource;
  */
 public class NotPredicate extends UnaryPredicate {
 
-    public NotPredicate(BasePredicate predicate) {
-        super(predicate);
-    }
+  public NotPredicate(BasePredicate predicate) {
+    super(predicate);
+  }
 
-    @Override
-    public boolean evaluate(Resource resource) {
-        return !getPredicate().evaluate(resource);
-    }
+  @Override
+  public boolean evaluate(Resource resource) {
+    return !getPredicate().evaluate(resource);
+  }
 
-    @Override
-    public String getOperator() {
-        return "NOT";
-    }
+  @Override
+  public String getOperator() {
+    return "NOT";
+  }
 }

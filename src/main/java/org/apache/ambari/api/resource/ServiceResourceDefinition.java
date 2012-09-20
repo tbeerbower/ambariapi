@@ -49,45 +49,45 @@ import java.util.Set;
  */
 public class ServiceResourceDefinition extends BaseResourceDefinition {
 
-    private String m_clusterId;
+  private String m_clusterId;
 
-    @Override
-    public String getPluralName() {
-        return "services";
-    }
+  @Override
+  public String getPluralName() {
+    return "services";
+  }
 
-    @Override
-    public String getSingularName() {
-        return "service";
-    }
+  @Override
+  public String getSingularName() {
+    return "service";
+  }
 
-    public ServiceResourceDefinition(String id, String clusterId) {
-        super(Resource.Type.Service, id);
-        m_clusterId = clusterId;
-        setResourceId(Resource.Type.Cluster, m_clusterId);
-    }
+  public ServiceResourceDefinition(String id, String clusterId) {
+    super(Resource.Type.Service, id);
+    m_clusterId = clusterId;
+    setResourceId(Resource.Type.Cluster, m_clusterId);
+  }
 
-    @Override
-    public Set<ResourceDefinition> getChildren() {
-        Set<ResourceDefinition> setChildren = new HashSet<ResourceDefinition>();
-        // for component collection need id property
-        ComponentResourceDefinition componentResourceDefinition =
-                new ComponentResourceDefinition(null, m_clusterId, getId());
-        PropertyId componentIdProperty = getClusterController().getSchema(
-                Resource.Type.Component).getKeyPropertyId(Resource.Type.Component);
-        componentResourceDefinition.getQuery().addProperty(componentIdProperty);
-        setChildren.add(componentResourceDefinition);
-        return setChildren;
-    }
+  @Override
+  public Set<ResourceDefinition> getChildren() {
+    Set<ResourceDefinition> setChildren = new HashSet<ResourceDefinition>();
+    // for component collection need id property
+    ComponentResourceDefinition componentResourceDefinition =
+        new ComponentResourceDefinition(null, m_clusterId, getId());
+    PropertyId componentIdProperty = getClusterController().getSchema(
+        Resource.Type.Component).getKeyPropertyId(Resource.Type.Component);
+    componentResourceDefinition.getQuery().addProperty(componentIdProperty);
+    setChildren.add(componentResourceDefinition);
+    return setChildren;
+  }
 
-    @Override
-    public Set<ResourceDefinition> getRelations() {
-        return Collections.emptySet();
-    }
+  @Override
+  public Set<ResourceDefinition> getRelations() {
+    return Collections.emptySet();
+  }
 
-    @Override
-    public ResultFormatter getResultFormatter() {
-        //todo: instance formatter
-        return getId() == null ? new CollectionFormatter(this) : new ServiceInstanceFormatter(this);
-    }
+  @Override
+  public ResultFormatter getResultFormatter() {
+    //todo: instance formatter
+    return getId() == null ? new CollectionFormatter(this) : new ServiceInstanceFormatter(this);
+  }
 }

@@ -33,6 +33,7 @@
  * limitations under the License.
  */
 package org.apache.ambari.api.services.formatters;
+
 import org.apache.ambari.api.resource.ResourceDefinition;
 import org.apache.ambari.controller.spi.Resource;
 
@@ -44,38 +45,38 @@ import java.util.Map;
  * Result formatter for collection resources.
  */
 public class CollectionFormatter extends BaseFormatter {
-    /**
-     * Items collection
-     */
-    public List<HrefEntry> items = new ArrayList<HrefEntry>();
+  /**
+   * Items collection
+   */
+  public List<HrefEntry> items = new ArrayList<HrefEntry>();
 
-    /**
-     * Constructor.
-     *
-     * @param resourceDefinition  resource definition
-     */
-    public CollectionFormatter(ResourceDefinition resourceDefinition) {
-        super(resourceDefinition);
-    }
+  /**
+   * Constructor.
+   *
+   * @param resourceDefinition resource definition
+   */
+  public CollectionFormatter(ResourceDefinition resourceDefinition) {
+    super(resourceDefinition);
+  }
 
-    /**
-     * Add an item.
-     *
-     * @param href  the href to add
-     * @param r     the resource being added
-     */
-    @Override
-    public void addSubResource(HrefEntry href, Resource r) {
-        items.add(href);
-    }
+  /**
+   * Add an item.
+   *
+   * @param href the href to add
+   * @param r    the resource being added
+   */
+  @Override
+  public void addSubResource(HrefEntry href, Resource r) {
+    items.add(href);
+  }
 
-    /**
-     * No-op.  Collections do not have properties.
-     *
-     * @param mapResults  results
-     */
-    @Override
-    void handleProperties(Map<String, List<Resource>> mapResults) {
-        // no-op no properties for collection resources
-    }
+  /**
+   * No-op.  Collections do not have properties.
+   *
+   * @param mapResults results
+   */
+  @Override
+  void handleProperties(Map<String, List<Resource>> mapResults) {
+    // no-op no properties for collection resources
+  }
 }

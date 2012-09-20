@@ -43,9 +43,9 @@ import javax.ws.rs.core.UriInfo;
  *
  */
 public class RequestFactory {
-    public Request createRequest(HttpHeaders headers, UriInfo uriInfo, Request.RequestType requestType,
-                                 ResourceDefinition resourceDefinition) {
+  public Request createRequest(HttpHeaders headers, UriInfo uriInfo, Request.RequestType requestType,
+                               ResourceDefinition resourceDefinition) {
 
-        return new RequestImpl(headers, uriInfo, requestType, resourceDefinition);
-    }
+    return new RequestImpl(headers, uriInfo, requestType, resourceDefinition);
+  }
 }

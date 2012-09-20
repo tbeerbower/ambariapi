@@ -31,31 +31,30 @@ import java.util.Set;
  */
 public class NotPredicateTest {
 
-    @Test
-    public void testApply() {
-        Resource resource = new ResourceImpl(Resource.Type.HostComponent);
-        PropertyIdImpl propertyId = new PropertyIdImpl("foo", "category1", false);
-        EqualsPredicate predicate = new EqualsPredicate(propertyId, "bar");
-        NotPredicate notPredicate = new NotPredicate(predicate);
+  @Test
+  public void testApply() {
+    Resource resource = new ResourceImpl(Resource.Type.HostComponent);
+    PropertyIdImpl propertyId = new PropertyIdImpl("foo", "category1", false);
+    EqualsPredicate predicate = new EqualsPredicate(propertyId, "bar");
+    NotPredicate notPredicate = new NotPredicate(predicate);
 
-        resource.setProperty(propertyId, "monkey");
-        Assert.assertTrue(notPredicate.evaluate(resource));
+    resource.setProperty(propertyId, "monkey");
+    Assert.assertTrue(notPredicate.evaluate(resource));
 
-        resource.setProperty(propertyId, "bar");
-        Assert.assertFalse(notPredicate.evaluate(resource));
-    }
+    resource.setProperty(propertyId, "bar");
+    Assert.assertFalse(notPredicate.evaluate(resource));
+  }
 
-    @Test
-    public void testGetProperties() {
-        PropertyIdImpl propertyId = new PropertyIdImpl("foo", "category1", false);
-        EqualsPredicate predicate = new EqualsPredicate(propertyId, "bar");
+  @Test
+  public void testGetProperties() {
+    PropertyIdImpl propertyId = new PropertyIdImpl("foo", "category1", false);
+    EqualsPredicate predicate = new EqualsPredicate(propertyId, "bar");
 
-        Set<PropertyId> ids = predicate.getPropertyIds();
+    Set<PropertyId> ids = predicate.getPropertyIds();
 
-        Assert.assertEquals(1, ids.size());
-        Assert.assertTrue(ids.contains(propertyId));
-    }
-
+    Assert.assertEquals(1, ids.size());
+    Assert.assertTrue(ids.contains(propertyId));
+  }
 
 
 }

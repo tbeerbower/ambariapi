@@ -47,24 +47,24 @@ import javax.ws.rs.core.UriInfo;
  */
 public class BaseService {
 
-    protected Response handleRequest(HttpHeaders headers, UriInfo uriInfo, Request.RequestType requestType,
-                                     ResourceDefinition resourceDefinition) {
+  protected Response handleRequest(HttpHeaders headers, UriInfo uriInfo, Request.RequestType requestType,
+                                   ResourceDefinition resourceDefinition) {
 
-        Request req = getRequestFactory().createRequest(headers, uriInfo, requestType, resourceDefinition);
-        Result result = getRequestHandler().handleRequest(req);
-        Object formattedResult = resourceDefinition.getResultFormatter().format(result, uriInfo);
-        return getResponseFactory().createResponse(req.getSerializer().serialize(formattedResult));
-    }
+    Request req = getRequestFactory().createRequest(headers, uriInfo, requestType, resourceDefinition);
+    Result result = getRequestHandler().handleRequest(req);
+    Object formattedResult = resourceDefinition.getResultFormatter().format(result, uriInfo);
+    return getResponseFactory().createResponse(req.getSerializer().serialize(formattedResult));
+  }
 
-    RequestFactory getRequestFactory() {
-        return new RequestFactory();
-    }
+  RequestFactory getRequestFactory() {
+    return new RequestFactory();
+  }
 
-    ResponseFactory getResponseFactory() {
-        return new ResponseFactory();
-    }
+  ResponseFactory getResponseFactory() {
+    return new ResponseFactory();
+  }
 
-    RequestHandler getRequestHandler() {
-        return new DelegatingRequestHandler();
-    }
+  RequestHandler getRequestHandler() {
+    return new DelegatingRequestHandler();
+  }
 }

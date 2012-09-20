@@ -29,10 +29,10 @@ import java.util.Set;
  */
 public class PredicateHelper {
 
-    public static Set<PropertyId> getPropertyIds(Predicate predicate) {
-        if (predicate instanceof BasePredicate) {
-            return ((BasePredicate) predicate).getPropertyIds();
-        }
-        return Collections.emptySet();
+  public static Set<PropertyId> getPropertyIds(Predicate predicate) {
+    if (predicate instanceof BasePredicate) {
+      return ((BasePredicate) predicate).getPropertyIds();
     }
+    return Collections.emptySet();
+  }
 }

@@ -43,12 +43,12 @@ import org.apache.ambari.api.query.Query;
  */
 public class ReadRequestHandler implements RequestHandler {
 
-    @Override
-    public Result handleRequest(Request request) {
-        Query query = request.getResource().getQuery();
+  @Override
+  public Result handleRequest(Request request) {
+    Query query = request.getResource().getQuery();
 
-        // would need to account for PR and expansion here
+    // would need to account for PR and expansion here
 
-        return query.execute();
-    }
+    return query.execute();
+  }
 }

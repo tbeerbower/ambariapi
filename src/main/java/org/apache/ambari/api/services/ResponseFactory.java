@@ -40,7 +40,7 @@ import javax.ws.rs.core.Response;
  *
  */
 public class ResponseFactory {
-    public Response createResponse(Object result) {
-        return Response.ok(result).build();
-    }
+  public Response createResponse(Object result) {
+    return Response.ok(result).build();
+  }
 }

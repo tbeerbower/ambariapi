@@ -25,23 +25,23 @@ import org.apache.ambari.controller.spi.Resource;
  */
 public class OrPredicate extends ArrayPredicate {
 
-    public OrPredicate(BasePredicate ... predicates) {
-        super(predicates);
-    }
+  public OrPredicate(BasePredicate... predicates) {
+    super(predicates);
+  }
 
-    @Override
-    public boolean evaluate(Resource resource) {
-        BasePredicate[] predicates = getPredicates();
-        for (BasePredicate predicate : predicates) {
-            if (predicate.evaluate(resource)) {
-                return true;
-            }
-        }
-        return false;
+  @Override
+  public boolean evaluate(Resource resource) {
+    BasePredicate[] predicates = getPredicates();
+    for (BasePredicate predicate : predicates) {
+      if (predicate.evaluate(resource)) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    @Override
-    public String getOperator() {
-        return "OR";
-    }
+  @Override
+  public String getOperator() {
+    return "OR";
+  }
 }

@@ -44,6 +44,7 @@ import java.util.Map;
  *
  */
 public interface Result {
-    public void addResources(String groupName, List<Resource> listResources);
-    public Map<String, List<Resource>> getResources();
+  public void addResources(String groupName, List<Resource> listResources);
+
+  public Map<String, List<Resource>> getResources();
 }

@@ -44,13 +44,16 @@ import java.util.Set;
  *
  */
 public interface Query {
-    public void addAllProperties(Map<String, Set<String>> setProperties);
+  public void addAllProperties(Map<String, Set<String>> setProperties);
 
-    public void addProperty(String path, String property);
-    public void addProperty(PropertyId property);
-    //todo: signature - need path
-    public void retainAllProperties(Set<String> setFields);
-    public void clearAllProperties();
+  public void addProperty(String path, String property);
 
-    public Result execute();
+  public void addProperty(PropertyId property);
+
+  //todo: signature - need path
+  public void retainAllProperties(Set<String> setFields);
+
+  public void clearAllProperties();
+
+  public Result execute();
 }

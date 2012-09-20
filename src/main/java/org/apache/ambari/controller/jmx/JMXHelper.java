@@ -28,19 +28,19 @@ import java.net.URLConnection;
  */
 public class JMXHelper {
 
-    public static JMXMetrics getJMXMetrics(String target, String bean) {
-        String s = "http://" + target + "/jmx?qry=" + (bean == null ? "Hadoop:*" : bean );
-        try {
-            URLConnection connection = new URL(s).openConnection();
+  public static JMXMetrics getJMXMetrics(String target, String bean) {
+    String s = "http://" + target + "/jmx?qry=" + (bean == null ? "Hadoop:*" : bean);
+    try {
+      URLConnection connection = new URL(s).openConnection();
 
-            connection.setDoOutput(true);
+      connection.setDoOutput(true);
 
-            return new ObjectMapper().readValue(connection.getInputStream(),
-                    JMXMetrics.class);
+      return new ObjectMapper().readValue(connection.getInputStream(),
+          JMXMetrics.class);
 
-        } catch (IOException e) {
-            System.out.println("getJMXMetrics : caught " + e);
-            throw new IllegalStateException("Can't get metric " + ".", e);
-        }
+    } catch (IOException e) {
+      System.out.println("getJMXMetrics : caught " + e);
+      throw new IllegalStateException("Can't get metric " + ".", e);
     }
+  }
 }

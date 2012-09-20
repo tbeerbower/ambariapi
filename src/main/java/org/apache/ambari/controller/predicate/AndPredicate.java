@@ -27,23 +27,23 @@ import org.apache.ambari.controller.spi.Resource;
  */
 public class AndPredicate extends ArrayPredicate {
 
-    public AndPredicate(BasePredicate ... predicates) {
-        super(predicates);
-    }
+  public AndPredicate(BasePredicate... predicates) {
+    super(predicates);
+  }
 
-    @Override
-    public boolean evaluate(Resource resource) {
-        Predicate[] predicates = getPredicates();
-        for (Predicate predicate : predicates) {
-            if (!predicate.evaluate(resource)) {
-                return false;
-            }
-        }
-        return true;
+  @Override
+  public boolean evaluate(Resource resource) {
+    Predicate[] predicates = getPredicates();
+    for (Predicate predicate : predicates) {
+      if (!predicate.evaluate(resource)) {
+        return false;
+      }
     }
+    return true;
+  }
 
-    @Override
-    public String getOperator() {
-        return "AND";
-    }
+  @Override
+  public String getOperator() {
+    return "AND";
+  }
 }

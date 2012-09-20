@@ -46,27 +46,37 @@ import java.util.Set;
  */
 public interface Request {
 
-    public enum RequestType {
-        GET,
-        PUT,
-        POST,
-        DELETE
-    }
+  public enum RequestType {
+    GET,
+    PUT,
+    POST,
+    DELETE
+  }
 
-    public enum ResponseType { JSON }
+  public enum ResponseType {JSON}
 
-    public ResourceDefinition getResource();
-    public URI getURI();
-    public RequestType getRequestType();
-    public int getAPIVersion();
-    public Map<String, List<String>> getQueryParameters();
-    public Map<String, List<String>> getQueryPredicates();
-    public Set<String> getPartialResponseFields();
-    public Set<String> getExpandEntities();
-    public Map<String, List<String>> getHeaders();
-    public String getBody();
-    public Serializer getSerializer();
+  public ResourceDefinition getResource();
 
-    //todo: temporal information.  For now always specify in PR for each field.  Could use *[...] ?
-    //public Map<String, TemporalData> getTemporalFields();
+  public URI getURI();
+
+  public RequestType getRequestType();
+
+  public int getAPIVersion();
+
+  public Map<String, List<String>> getQueryParameters();
+
+  public Map<String, List<String>> getQueryPredicates();
+
+  public Set<String> getPartialResponseFields();
+
+  public Set<String> getExpandEntities();
+
+  public Map<String, List<String>> getHeaders();
+
+  public String getBody();
+
+  public Serializer getSerializer();
+
+  //todo: temporal information.  For now always specify in PR for each field.  Could use *[...] ?
+  //public Map<String, TemporalData> getTemporalFields();
 }

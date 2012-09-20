@@ -49,21 +49,21 @@ import java.util.Map;
 //todo: consider building a tree structure.
 public class ResultImpl implements Result {
 
-    private Map<String, List<Resource>> m_mapResources = new HashMap<String, List<Resource>>();
+  private Map<String, List<Resource>> m_mapResources = new HashMap<String, List<Resource>>();
 
-    @Override
-    public void addResources(String groupName, List<Resource> listResources) {
-        List<Resource> resources = m_mapResources.get(groupName);
-        if (resources == null) {
-            m_mapResources.put(groupName, listResources);
-        } else {
-            resources.addAll(listResources);
-        }
+  @Override
+  public void addResources(String groupName, List<Resource> listResources) {
+    List<Resource> resources = m_mapResources.get(groupName);
+    if (resources == null) {
+      m_mapResources.put(groupName, listResources);
+    } else {
+      resources.addAll(listResources);
     }
+  }
 
-    @Override
-    public Map<String, List<Resource>> getResources() {
-        return m_mapResources;
-    }
+  @Override
+  public Map<String, List<Resource>> getResources() {
+    return m_mapResources;
+  }
 }
 

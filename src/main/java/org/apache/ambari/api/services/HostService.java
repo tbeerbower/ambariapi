@@ -48,76 +48,72 @@ import javax.ws.rs.core.*;
  */
 public class HostService extends BaseService {
 
-    /**
-     * Parent cluster id.
-     */
-    private String m_clusterName;
+  /**
+   * Parent cluster id.
+   */
+  private String m_clusterName;
 
-    /**
-     * Constructor.
-     *
-     * @param clusterName  cluster id
-     */
-    public HostService(String clusterName) {
-        m_clusterName = clusterName;
-    }
+  /**
+   * Constructor.
+   *
+   * @param clusterName cluster id
+   */
+  public HostService(String clusterName) {
+    m_clusterName = clusterName;
+  }
 
-    /**
-     * Handles URL: /clusters/{clusterID}/hosts/{hostID}
-     * Get a specific host.
-     *
-     * @param headers   http headers
-     * @param ui        uri info
-     * @param hostName  host id
-     *
-     * @return host resource representation
-     */
-    @GET
-    @Path("{hostName}")
-    @Produces("text/plain")
-    public Response getHost(@Context HttpHeaders headers, @Context UriInfo ui,
-                            @PathParam("hostName") String hostName) {
+  /**
+   * Handles URL: /clusters/{clusterID}/hosts/{hostID}
+   * Get a specific host.
+   *
+   * @param headers  http headers
+   * @param ui       uri info
+   * @param hostName host id
+   * @return host resource representation
+   */
+  @GET
+  @Path("{hostName}")
+  @Produces("text/plain")
+  public Response getHost(@Context HttpHeaders headers, @Context UriInfo ui,
+                          @PathParam("hostName") String hostName) {
 
-        return handleRequest(headers, ui, Request.RequestType.GET,
-                createResourceDefinition(hostName, m_clusterName));
-    }
+    return handleRequest(headers, ui, Request.RequestType.GET,
+        createResourceDefinition(hostName, m_clusterName));
+  }
 
-    /**
-     * Handles URL: /clusters/{clusterID}/hosts or /clusters/hosts
-     * Get all hosts for a cluster.
-     *
-     * @param headers  http headers
-     * @param ui       uri info
-     *
-     * @return host collection resource representation
-     */
-    @GET
-    @Produces("text/plain")
-    public Response getHosts(@Context HttpHeaders headers, @Context UriInfo ui) {
-        return handleRequest(headers, ui, Request.RequestType.GET, createResourceDefinition(null, m_clusterName));
-    }
+  /**
+   * Handles URL: /clusters/{clusterID}/hosts or /clusters/hosts
+   * Get all hosts for a cluster.
+   *
+   * @param headers http headers
+   * @param ui      uri info
+   * @return host collection resource representation
+   */
+  @GET
+  @Produces("text/plain")
+  public Response getHosts(@Context HttpHeaders headers, @Context UriInfo ui) {
+    return handleRequest(headers, ui, Request.RequestType.GET, createResourceDefinition(null, m_clusterName));
+  }
 
-    /**
-     * Get the host_components sub-resource.
-     *
-     * @param hostName  host id
-     *
-     * @return the host_components service
-     */
-    @Path("{hostName}/host_components")
-    public HostComponentService getHostComponentHandler(@PathParam("hostName") String hostName) {
-        return new HostComponentService(m_clusterName, hostName);
-    }
+  /**
+   * Get the host_components sub-resource.
+   *
+   * @param hostName host id
+   * @return the host_components service
+   */
+  @Path("{hostName}/host_components")
+  public HostComponentService getHostComponentHandler(@PathParam("hostName") String hostName) {
+    return new HostComponentService(m_clusterName, hostName);
+  }
 
-    /**
-     * Create a host resource definition.
-     *
-     * @param hostName     host name
-     * @param clusterName  cluster name
-     *
-     * @return a host resource definition
-     */
-    ResourceDefinition createResourceDefinition(String hostName, String clusterName) {
-        return new HostResourceDefinition(hostName, clusterName);
-    }
+  /**
+   * Create a host resource definition.
+   *
+   * @param hostName    host name
+   * @param clusterName cluster name
+   * @return a host resource definition
+   */
+  ResourceDefinition createResourceDefinition(String hostName, String clusterName) {
+    return new HostResourceDefinition(hostName, clusterName);
+  }
 }

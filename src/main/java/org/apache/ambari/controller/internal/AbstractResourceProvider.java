@@ -43,14 +43,14 @@ import java.util.List;
 /**
  * Abstract resource provider implementation.
  */
-public abstract class AbstractResourceProvider implements ResourceProvider{
-    private final List<PropertyProvider> propertyProviders = new LinkedList<PropertyProvider>();
+public abstract class AbstractResourceProvider implements ResourceProvider {
+  private final List<PropertyProvider> propertyProviders = new LinkedList<PropertyProvider>();
 
-    public void addPropertyProvider(PropertyProvider provider) {
-        propertyProviders.add(provider);
-    }
+  public void addPropertyProvider(PropertyProvider provider) {
+    propertyProviders.add(provider);
+  }
 
-    protected List<PropertyProvider> getPropertyProviders() {
-        return propertyProviders;
-    }
+  protected List<PropertyProvider> getPropertyProviders() {
+    return propertyProviders;
+  }
 }

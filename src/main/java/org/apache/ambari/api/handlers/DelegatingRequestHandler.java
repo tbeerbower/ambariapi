@@ -41,12 +41,12 @@ import org.apache.ambari.api.services.Result;
  *
  */
 public class DelegatingRequestHandler implements RequestHandler {
-    @Override
-    public Result handleRequest(Request request) {
-        return getRequestHandlerFactory().getRequestHandler(request.getRequestType()).handleRequest(request);
-    }
+  @Override
+  public Result handleRequest(Request request) {
+    return getRequestHandlerFactory().getRequestHandler(request.getRequestType()).handleRequest(request);
+  }
 
-    RequestHandlerFactory getRequestHandlerFactory() {
-        return new RequestHandlerFactory();
-    }
+  RequestHandlerFactory getRequestHandlerFactory() {
+    return new RequestHandlerFactory();
+  }
 }

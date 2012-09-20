@@ -41,5 +41,5 @@ import org.apache.ambari.api.services.Result;
  *
  */
 public interface RequestHandler {
-    public Result handleRequest(Request request);
+  public Result handleRequest(Request request);
 }

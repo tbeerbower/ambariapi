@@ -45,19 +45,19 @@ import java.util.Set;
  */
 public class RequestImpl implements Request {
 
-    private final Set<PropertyId> propertyIds;
+  private final Set<PropertyId> propertyIds;
 
-    public RequestImpl(Set<PropertyId> propertyIds) {
-        this.propertyIds = Collections.unmodifiableSet(propertyIds);
-    }
+  public RequestImpl(Set<PropertyId> propertyIds) {
+    this.propertyIds = Collections.unmodifiableSet(propertyIds);
+  }
 
-    @Override
-    public Set<PropertyId> getPropertyIds() {
-        return propertyIds;
-    }
+  @Override
+  public Set<PropertyId> getPropertyIds() {
+    return propertyIds;
+  }
 
-    @Override
-    public TemporalInfo getTemporalInfo(PropertyId id) {
-        return null;  //TODO
-    }
+  @Override
+  public TemporalInfo getTemporalInfo(PropertyId id) {
+    return null;  //TODO
+  }
 }

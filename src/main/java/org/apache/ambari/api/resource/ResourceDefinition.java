@@ -45,14 +45,21 @@ import java.util.Set;
  *
  */
 public interface ResourceDefinition {
-    public String getPluralName();
-    public String getSingularName();
-    public String getId();
-    public Set<ResourceDefinition> getChildren();
-    public Set<ResourceDefinition> getRelations();
-    public Map<Resource.Type, String> getResourceIds();
-    public ResultFormatter getResultFormatter();
+  public String getPluralName();
 
-    public Resource.Type getType();
-    public Query getQuery();
+  public String getSingularName();
+
+  public String getId();
+
+  public Set<ResourceDefinition> getChildren();
+
+  public Set<ResourceDefinition> getRelations();
+
+  public Map<Resource.Type, String> getResourceIds();
+
+  public ResultFormatter getResultFormatter();
+
+  public Resource.Type getType();
+
+  public Query getQuery();
 }
