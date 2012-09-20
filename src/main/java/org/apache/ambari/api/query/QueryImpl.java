@@ -1,14 +1,14 @@
 package org.apache.ambari.api.query;
 
-import org.apache.ambari.api.internal.ClusterControllerImpl;
-import org.apache.ambari.api.internal.PropertyIdImpl;
-import org.apache.ambari.api.internal.RequestImpl;
-import org.apache.ambari.api.predicate.AndPredicate;
-import org.apache.ambari.api.predicate.BasePredicate;
-import org.apache.ambari.api.predicate.EqualsPredicate;
+import org.apache.ambari.controller.internal.ClusterControllerImpl;
+import org.apache.ambari.controller.internal.PropertyIdImpl;
+import org.apache.ambari.controller.internal.RequestImpl;
+import org.apache.ambari.controller.predicate.AndPredicate;
+import org.apache.ambari.controller.predicate.BasePredicate;
+import org.apache.ambari.controller.predicate.EqualsPredicate;
 import org.apache.ambari.api.services.Result;
 import org.apache.ambari.api.services.ResultImpl;
-import org.apache.ambari.api.spi.*;
+import org.apache.ambari.controller.spi.*;
 import org.apache.ambari.api.resource.ResourceDefinition;
 
 import java.util.*;

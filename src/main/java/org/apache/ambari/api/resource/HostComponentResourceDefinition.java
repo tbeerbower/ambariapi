@@ -3,8 +3,8 @@ package org.apache.ambari.api.resource;
 import org.apache.ambari.api.services.formatters.CollectionFormatter;
 import org.apache.ambari.api.services.formatters.HostComponentInstanceFormatter;
 import org.apache.ambari.api.services.formatters.ResultFormatter;
-import org.apache.ambari.api.spi.PropertyId;
-import org.apache.ambari.api.spi.Resource;
+import org.apache.ambari.controller.spi.PropertyId;
+import org.apache.ambari.controller.spi.Resource;
 
 import java.util.Collections;
 import java.util.HashSet;

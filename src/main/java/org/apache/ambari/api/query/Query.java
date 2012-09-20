@@ -1,7 +1,7 @@
 package org.apache.ambari.api.query;
 
 import org.apache.ambari.api.services.Result;
-import org.apache.ambari.api.spi.PropertyId;
+import org.apache.ambari.controller.spi.PropertyId;
 
 import java.util.Map;
 import java.util.Set;

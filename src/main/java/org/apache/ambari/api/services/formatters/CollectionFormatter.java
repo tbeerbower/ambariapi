@@ -1,6 +1,6 @@
 package org.apache.ambari.api.services.formatters;
 import org.apache.ambari.api.resource.ResourceDefinition;
-import org.apache.ambari.api.spi.Resource;
+import org.apache.ambari.controller.spi.Resource;
 
 import java.util.ArrayList;
 import java.util.List;

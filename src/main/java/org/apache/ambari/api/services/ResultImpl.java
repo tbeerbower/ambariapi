@@ -1,7 +1,7 @@
 package org.apache.ambari.api.services;
 
 
-import org.apache.ambari.api.spi.Resource;
+import org.apache.ambari.controller.spi.Resource;
 
 import java.util.HashMap;
 import java.util.List;
