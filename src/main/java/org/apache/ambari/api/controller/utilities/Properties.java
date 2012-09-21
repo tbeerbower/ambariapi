@@ -39,11 +39,11 @@ public class Properties {
   private static final Map<String, Map<String, Set<PropertyId>>> PROPERTY_IDS = readPropertyIds(PROPERTIES_FILE);
   private static final Map<String, Map<String, PropertyId>> KEY_PROPERTY_IDS = readKeyPropertyIds(KEY_PROPERTIES_FILE);
 
-  public PropertyId getPropertyId(String name, String category) {
+  public static PropertyId getPropertyId(String name, String category) {
     return new PropertyIdImpl(name, category, false);
   }
 
-  public PropertyId getPropertyId(String name, String category, boolean temporal) {
+  public static PropertyId getPropertyId(String name, String category, boolean temporal) {
     return new PropertyIdImpl(name, category, temporal);
   }
 

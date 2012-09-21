@@ -15,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.ambari.api.controller.jmx;
 
 import org.apache.ambari.api.controller.internal.PropertyIdImpl;
@@ -59,10 +60,26 @@ public class JMXPropertyProvider implements PropertyProvider {
   }
 
   @Override
-  public void populateResource(Resource resource, Request request, Predicate predicate) {
+  public Set<Resource> populateResources(Set<Resource> resources, Request request, Predicate predicate) {
+    Set<Resource> keepers = new HashSet<Resource>();
+    for (Resource resource : resources) {
+      if (populateResource(resource, request, predicate)) {
+        keepers.add(resource);
+      }
+    }
+    return keepers;
+  }
+
+  @Override
+  public Set<PropertyId> getPropertyIds() {
+    return propertyIds;
+  }
+
+
+  private boolean populateResource(Resource resource, Request request, Predicate predicate) {
 
     if (getPropertyIds().isEmpty()) {
-      return;
+      return true;
     }
 
     Set<PropertyId> ids = new HashSet<PropertyId>(request.getPropertyIds());
@@ -81,7 +98,7 @@ public class JMXPropertyProvider implements PropertyProvider {
     String jmxSource = hostName + ":" + port;
 
     if (hostName == null || port == null || jmxSource == null) {
-      return;
+      return true;
     }
 
     JMXMetrics metrics = JMXHelper.getJMXMetrics(jmxSource, null);
@@ -101,11 +118,7 @@ public class JMXPropertyProvider implements PropertyProvider {
         }
       }
     }
-  }
-
-  @Override
-  public Set<PropertyId> getPropertyIds() {
-    return propertyIds;
+    return true;
   }
 
   /**

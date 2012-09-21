@@ -17,6 +17,7 @@
  */
 package org.apache.ambari.api.controller.spi;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,4 +51,18 @@ public interface Schema {
    * @return the map of categories
    */
   public Map<String, Set<String>> getCategories();
+
+  /**
+   * Get the resource provider for the resource type associated with this schema.
+   *
+   * @return the resource provider for the resource type associated with this schema
+   */
+  public ResourceProvider getResourceProvider();
+
+  /**
+   * Get the list of property providers for the resource associated with this schema.
+   *
+   * @return the list of property providers for the resource associated with this schema
+   */
+  public List<PropertyProvider> getPropertyProviders();
 }

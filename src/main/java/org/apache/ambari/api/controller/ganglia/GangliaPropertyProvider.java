@@ -15,23 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.apache.ambari.api.controller.ganglia;
 
 import org.apache.ambari.api.controller.internal.PropertyIdImpl;
@@ -104,7 +88,22 @@ public class GangliaPropertyProvider implements PropertyProvider {
   }
 
   @Override
-  public void populateResource(Resource resource, Request request, Predicate predicate) {
+  public Set<Resource> populateResources(Set<Resource> resources, Request request, Predicate predicate) {
+    Set<Resource> keepers = new HashSet<Resource>();
+    for (Resource resource : resources) {
+      if (populateResource(resource, request, predicate)) {
+        keepers.add(resource);
+      }
+    }
+    return keepers;
+  }
+
+  @Override
+  public Set<PropertyId> getPropertyIds() {
+    return PROPERTY_IDS;
+  }
+
+  private boolean populateResource(Resource resource, Request request, Predicate predicate) {
 
     Set<PropertyId> ids = new HashSet<PropertyId>(request.getPropertyIds());
     if (ids == null || ids.isEmpty()) {
@@ -126,7 +125,7 @@ public class GangliaPropertyProvider implements PropertyProvider {
     String cluster = COMPONENT_MAP.get(component);
 
     if (cluster == null) {
-      return;
+      return true;
     }
 
     for (PropertyId propertyId : ids) {
@@ -140,11 +139,7 @@ public class GangliaPropertyProvider implements PropertyProvider {
 
       resource.setProperty(propertyId, getTemporalValue(dataPoints));
     }
-  }
-
-  @Override
-  public Set<PropertyId> getPropertyIds() {
-    return PROPERTY_IDS;
+    return true;
   }
 
   private String getTemporalValue(double[][] dataPoints) {

@@ -17,6 +17,8 @@
  */
 package org.apache.ambari.api.controller.spi;
 
+import java.util.Set;
+
 /**
  * The cluster controller is the main access point for getting properties
  * from the backend providers.  A cluster controller maintains a mapping of
@@ -46,7 +48,6 @@ public interface ClusterController {
    * @return the schema object for the given resource
    */
   public Schema getSchema(Resource.Type type);
-
 
   // ----- Management -------------------------------------------------------
   // TODO

@@ -16,27 +16,35 @@
  * limitations under the License.
  */
 
-package org.apache.ambari.api.controller.predicate;
+package org.apache.ambari.api.controller.internal;
 
+import junit.framework.Assert;
 import org.apache.ambari.api.controller.spi.PropertyId;
-import org.apache.ambari.api.controller.spi.Resource;
+import org.apache.ambari.api.controller.spi.Request;
+import org.apache.ambari.api.controller.utilities.Properties;
+import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Predicate that checks if a given value is greater than or equal to a {@link Resource} property.
+ *
  */
-public class GreaterEqualsPredicate extends ComparisonPredicate {
+public class RequestImplTest {
 
-  public GreaterEqualsPredicate(PropertyId propertyId, Comparable<String> value) {
-    super(propertyId, value);
+  private static final Set<PropertyId> propertyIds = new HashSet<PropertyId>();
+
+  static {
+    propertyIds.add(Properties.getPropertyId("p1", "c1"));
+    propertyIds.add(Properties.getPropertyId("p2", "c1"));
+    propertyIds.add(Properties.getPropertyId("p3", "c2"));
+    propertyIds.add(Properties.getPropertyId("p4", "c3"));
   }
 
-  @Override
-  public boolean evaluate(Resource resource) {
-    return getValue().compareTo(resource.getPropertyValue(getPropertyId())) <= 0;
-  }
+  @Test
+  public void testGetPropertyIds() {
+    Request request = new RequestImpl(propertyIds);
 
-  @Override
-  public String getOperator() {
-    return ">=";
+    Assert.assertEquals(propertyIds, request.getPropertyIds());
   }
 }

@@ -15,37 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.apache.ambari.api.controller.jdbc;
 
-import org.apache.ambari.api.controller.internal.AbstractResourceProvider;
 import org.apache.ambari.api.controller.internal.PropertyIdImpl;
 import org.apache.ambari.api.controller.internal.ResourceImpl;
-import org.apache.ambari.api.controller.internal.SchemaImpl;
 import org.apache.ambari.api.controller.predicate.PredicateVisitorAcceptor;
 import org.apache.ambari.api.controller.spi.Predicate;
 import org.apache.ambari.api.controller.spi.PropertyId;
-import org.apache.ambari.api.controller.spi.PropertyProvider;
 import org.apache.ambari.api.controller.spi.Request;
 import org.apache.ambari.api.controller.spi.Resource;
 import org.apache.ambari.api.controller.spi.ResourceProvider;
-import org.apache.ambari.api.controller.spi.Schema;
 import org.apache.ambari.api.controller.utilities.PredicateHelper;
 import org.apache.ambari.api.controller.utilities.Properties;
 
@@ -62,7 +42,7 @@ import java.util.Set;
 /**
  * JDBC based resource provider.
  */
-public class JDBCResourceProvider extends AbstractResourceProvider {
+public class JDBCResourceProvider implements ResourceProvider {
 
   private final Resource.Type type;
 
@@ -70,11 +50,7 @@ public class JDBCResourceProvider extends AbstractResourceProvider {
 
   private final PropertyId[][] f_keys;
 
-  private final Schema schema;
-
   private final ConnectionFactory connectionFactory;
-
-  //TODO : inject property providers
 
   private static final Map<Resource.Type, PropertyId[][]> F_KEYS = new HashMap<Resource.Type, PropertyId[][]>();
 
@@ -95,9 +71,6 @@ public class JDBCResourceProvider extends AbstractResourceProvider {
     this.type = type;
     this.propertyIds = Properties.getPropertyIds(type, "DB");
     this.f_keys = F_KEYS.get(type);
-    schema = new SchemaImpl(this, Properties.getKeyPropertyIds(type));
-
-//        addPropertyProvider(JMXPropertyProvider.create(type, DBHelper.getHosts()));
   }
 
   @Override
@@ -150,12 +123,6 @@ public class JDBCResourceProvider extends AbstractResourceProvider {
 
     } catch (SQLException e) {
       throw new IllegalStateException("DB error : ", e);
-    }
-
-    for (Resource resource : resources) {
-      for (PropertyProvider propertyProvider : getPropertyProviders()) {
-        propertyProvider.populateResource(resource, request, predicate);
-      }
     }
 
     return resources;
@@ -230,11 +197,6 @@ public class JDBCResourceProvider extends AbstractResourceProvider {
   @Override
   public Set<PropertyId> getPropertyIds() {
     return propertyIds;
-  }
-
-  @Override
-  public Schema getSchema() {
-    return schema;
   }
 
   /**

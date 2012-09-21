@@ -57,11 +57,4 @@ public interface ResourceProvider {
    * @return the set of property ids for the properties that this provider can provide
    */
   public Set<PropertyId> getPropertyIds();
-
-  /**
-   * Get the schema object associated with this resource provider.
-   *
-   * @return the schema
-   */
-  public Schema getSchema();
 }

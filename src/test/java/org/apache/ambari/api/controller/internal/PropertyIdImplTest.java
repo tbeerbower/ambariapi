@@ -16,31 +16,40 @@
  * limitations under the License.
  */
 
-package org.apache.ambari.api.controller.jdbc;
+package org.apache.ambari.api.controller.internal;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import junit.framework.Assert;
+import org.apache.ambari.api.controller.spi.PropertyId;
+import org.junit.Test;
 
 /**
  *
  */
-public class SQLiteConnectionFactory implements ConnectionFactory {
+public class PropertyIdImplTest {
 
-  private static String DB_FILE_NAME = System.getProperty("ambariapi.dbfile", "src/test/resources/data.db");
+  @Test
+  public void testGetName() {
+    PropertyId propertyId = new PropertyIdImpl("p1", "c1", false);
 
-  public static final String CONNECTION_URL = "jdbc:sqlite:" + DB_FILE_NAME;
-
-  public SQLiteConnectionFactory() {
-    try {
-      Class.forName("org.sqlite.JDBC");
-    } catch (ClassNotFoundException e) {
-      throw new IllegalStateException("Can't load SQLite.", e);
-    }
+    Assert.assertEquals("p1", propertyId.getName());
   }
 
-  @Override
-  public Connection getConnection() throws SQLException {
-    return DriverManager.getConnection(CONNECTION_URL);
+  @Test
+  public void testGetCategory() {
+    PropertyId propertyId = new PropertyIdImpl("p1", "c1", false);
+
+    Assert.assertEquals("c1", propertyId.getCategory());
   }
+
+  @Test
+  public void testIsTemporal() {
+    PropertyId propertyId = new PropertyIdImpl("p1", "c1", false);
+
+    Assert.assertFalse(propertyId.isTemporal());
+
+    propertyId = new PropertyIdImpl("p1", "c1", true);
+
+    Assert.assertTrue(propertyId.isTemporal());
+  }
+
 }

@@ -27,14 +27,18 @@ import java.util.Set;
 public interface PropertyProvider {
 
   /**
-   * Populate the given resource with any properties that this property
-   * provider can provide.
+   * Populate the given set of resource with any properties that this property
+   * provider can provide and return a populated set of resources.  The provider
+   * may drop resources from the original set if it determines that the don't
+   * meet the conditions of the predicate.
    *
-   * @param resource  the resource to be populated
-   * @param request   the request object which defines the desired set of properties
-   * @param predicate the predicate object which filters which resources are returned
+   * @param resources  the resources to be populated
+   * @param request    the request object which defines the desired set of properties
+   * @param predicate  the predicate object which filters which resources are returned
+   *
+   * @return the populated set of resources
    */
-  public void populateResource(Resource resource, Request request, Predicate predicate);
+  public Set<Resource> populateResources(Set<Resource> resources, Request request, Predicate predicate);
 
   /**
    * Get the set of property ids for the properties that this provider can provide.

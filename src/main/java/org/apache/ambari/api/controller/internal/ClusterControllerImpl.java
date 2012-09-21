@@ -15,36 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.apache.ambari.api.controller.internal;
 
-import org.apache.ambari.api.controller.jdbc.ConnectionFactory;
-import org.apache.ambari.api.controller.jdbc.JDBCResourceProvider;
-import org.apache.ambari.api.controller.jdbc.SQLiteConnectionFactory;
 import org.apache.ambari.api.controller.spi.ClusterController;
 import org.apache.ambari.api.controller.spi.Predicate;
+import org.apache.ambari.api.controller.spi.PropertyProvider;
 import org.apache.ambari.api.controller.spi.Request;
 import org.apache.ambari.api.controller.spi.Resource;
 import org.apache.ambari.api.controller.spi.ResourceProvider;
 import org.apache.ambari.api.controller.spi.Schema;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -55,49 +36,42 @@ import java.util.Set;
  */
 public class ClusterControllerImpl implements ClusterController {
 
-  private static final ClusterController SINGLETON = new ClusterControllerImpl();
+  private final Map<Resource.Type, Schema> schemas;
 
-  // TODO inject...
-  public final ConnectionFactory CONNECTION_FACTORY = new SQLiteConnectionFactory();
-
-  // TODO inject...
-  public final ResourceProvider ClusterResourceProvider = JDBCResourceProvider.create(CONNECTION_FACTORY, Resource.Type.Cluster);
-  public final ResourceProvider ServiceResourceProvider = JDBCResourceProvider.create(CONNECTION_FACTORY, Resource.Type.Service);
-  public final ResourceProvider HostResourceProvider = JDBCResourceProvider.create(CONNECTION_FACTORY, Resource.Type.Host);
-  public final ResourceProvider ComponentResourceProvider = JDBCResourceProvider.create(CONNECTION_FACTORY, Resource.Type.Component);
-  public final ResourceProvider HostComponentResourceProvider = JDBCResourceProvider.create(CONNECTION_FACTORY, Resource.Type.HostComponent);
-
-  private final Map<Resource.Type, ResourceProvider> providers = new HashMap<Resource.Type, ResourceProvider>();
-
-  private ClusterControllerImpl() {
-    providers.put(Resource.Type.Cluster, ClusterResourceProvider);
-    providers.put(Resource.Type.Service, ServiceResourceProvider);
-    providers.put(Resource.Type.Host, HostResourceProvider);
-    providers.put(Resource.Type.Component, ComponentResourceProvider);
-    providers.put(Resource.Type.HostComponent, HostComponentResourceProvider);
-  }
-
-  public static ClusterController getSingleton() {
-    return SINGLETON;
+  public ClusterControllerImpl(Map<Resource.Type, Schema> schemas) {
+    this.schemas = schemas;
   }
 
   @Override
   public Iterable<Resource> getResources(Resource.Type type, Request request, Predicate predicate) {
-    ResourceProvider provider = providers.get(type);
+    ResourceProvider provider = schemas.get(type).getResourceProvider();
     Set<Resource> resources = null;
-    if (provider != null) {
+
+    if (provider == null) {
+      resources = Collections.emptySet();
+    } else {
       resources = provider.getResources(request, predicate);
+      resources = populateResources(type, resources, request, predicate);
     }
     return new ResourceIterable(resources, predicate);
   }
 
   @Override
   public Schema getSchema(Resource.Type type) {
-    ResourceProvider provider = providers.get(type);
-    if (provider != null) {
-      return provider.getSchema();
+    return schemas.get(type);
+  }
+
+  private Set<Resource> populateResources(Resource.Type type,
+                                          Set<Resource> resources,
+                                          Request request,
+                                          Predicate predicate) {
+    Set<Resource> keepers = resources;
+
+    for (PropertyProvider propertyProvider : schemas.get(type).getPropertyProviders()) {
+      //TODO : only call the provider if it provides properties that we need ...
+      keepers = propertyProvider.populateResources(keepers, request, predicate);
     }
-    return null;
+    return keepers;
   }
 
   private static class ResourceIterable implements Iterable<Resource> {

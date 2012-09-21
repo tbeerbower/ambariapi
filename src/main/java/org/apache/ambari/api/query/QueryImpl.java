@@ -15,31 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.apache.ambari.api.query;
 
-import org.apache.ambari.api.controller.internal.ClusterControllerImpl;
 import org.apache.ambari.api.controller.internal.PropertyIdImpl;
 import org.apache.ambari.api.controller.internal.RequestImpl;
 import org.apache.ambari.api.controller.predicate.AndPredicate;
 import org.apache.ambari.api.controller.predicate.BasePredicate;
 import org.apache.ambari.api.controller.predicate.EqualsPredicate;
+import org.apache.ambari.api.controller.utilities.ClusterControllerHelper;
 import org.apache.ambari.api.services.Result;
 import org.apache.ambari.api.services.ResultImpl;
 import org.apache.ambari.api.controller.spi.*;
@@ -162,7 +146,7 @@ public class QueryImpl implements Query {
 
   //todo: how to get Controller?
   ClusterController getClusterController() {
-    return ClusterControllerImpl.getSingleton();
+    return ClusterControllerHelper.getClusterController();
   }
 
   //todo

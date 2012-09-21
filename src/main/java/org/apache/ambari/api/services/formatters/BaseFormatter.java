@@ -15,27 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.apache.ambari.api.services.formatters;
 
 
-import org.apache.ambari.api.controller.internal.ClusterControllerImpl;
+import org.apache.ambari.api.controller.utilities.ClusterControllerHelper;
 import org.apache.ambari.api.resource.ResourceDefinition;
 import org.apache.ambari.api.services.Result;
 import org.apache.ambari.api.controller.spi.Resource;
@@ -117,7 +101,7 @@ public abstract class BaseFormatter implements ResultFormatter {
   void handleResources(List<Resource> listResources, String baseHref) {
     // only format resources for collection resources
     if (m_resourceDefinition.getId() != null) return;
-    Schema schema = ClusterControllerImpl.getSingleton().getSchema(m_resourceDefinition.getType());
+    Schema schema = ClusterControllerHelper.getClusterController().getSchema(m_resourceDefinition.getType());
     for (Resource r : listResources) {
       addSubResource(new HrefEntry(baseHref + r.getPropertyValue(schema.getKeyPropertyId(
           m_resourceDefinition.getType()))), r);
@@ -151,7 +135,7 @@ public abstract class BaseFormatter implements ResultFormatter {
    * @param resourceName child resource name
    */
   void handleChild(Resource child, String baseHref, String resourceName) {
-    Schema schema = ClusterControllerImpl.getSingleton().getSchema(child.getType());
+    Schema schema = ClusterControllerHelper.getClusterController().getSchema(child.getType());
     addSubResource(new HrefEntry(baseHref + resourceName + '/' +
         child.getPropertyValue(schema.getKeyPropertyId(child.getType()))), child);
   }
@@ -182,7 +166,7 @@ public abstract class BaseFormatter implements ResultFormatter {
    * @param baseHref base url
    */
   void handleRelation(Resource relation, String baseHref) {
-    Schema schema = ClusterControllerImpl.getSingleton().getSchema(relation.getType());
+    Schema schema = ClusterControllerHelper.getClusterController().getSchema(relation.getType());
     String relationUrl = buildRelationHref(baseHref, schema, relation);
 
     addSubResource(new HrefEntry(relationUrl), relation);
